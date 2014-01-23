@@ -2,8 +2,8 @@ nhanes.accel.process <-
 function(waves=3, directory=getwd(), brevity=1, valid.days=1, 
          valid.week.days=0, valid.weekend.days=0,int.cuts=c(100,760,2020,5999),
          youth.mod.cuts=rep(int.cuts[3],12),youth.vig.cuts=rep(int.cuts[4],12),
-         save.dayfile=FALSE, days.distinct=FALSE, nonwear.window=60, nonwear.tol=0,
-         nonwear.tol.upper=99, nonwear.nci=FALSE, weartime.minimum=600, 
+         save.dayfile=FALSE, cpm.nci=FALSE, days.distinct=FALSE, nonwear.window=60, 
+         nonwear.tol=0,nonwear.tol.upper=99, nonwear.nci=FALSE, weartime.minimum=600, 
          weartime.maximum=1200, use.partialdays=FALSE, active.bout.length=10, 
          active.bout.tol=0, mvpa.bout.tol.lower=0, vig.bout.tol.lower=0, 
          active.bout.nci=FALSE, sed.bout.tol=0, sed.bout.tol.maximum=int.cuts[2]-1, 
@@ -39,6 +39,11 @@ function(waves=3, directory=getwd(), brevity=1, valid.days=1,
   # If save.dayfile is not a logical, output error
   if (!is.logical(save.dayfile)) {
     stop("For save.dayfile= option, please enter TRUE or FALSE")
+  }
+  
+  # If cpm.nci is not a logical, output error
+  if (!is.logical(cpm.nci)) {
+    stop("For cpm.nci= option, please enter TRUE or FALSE")
   }
   
   # If days.distinct is not a logical, output error
@@ -771,6 +776,11 @@ function(waves=3, directory=getwd(), brevity=1, valid.days=1,
     else {personaves = personaves[,c(1:45,196:197)]}
   } else if (brevity==3) {
     if (weekday.weekend==FALSE) {personaves = personaves[,c(1:69,196:197)]}
+  }
+  
+  # If cpm.nci is TRUE, re-calculate averages for cpm
+  if (cpm.nci==TRUE) {
+    personaves[,"cpm"] = personaves[,"counts"]/personaves[,"valid_min"]
   }
   
   # Write file with daily averages
