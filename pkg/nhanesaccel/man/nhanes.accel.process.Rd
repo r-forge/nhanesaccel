@@ -141,9 +141,9 @@ There are essentially three strategies for using nhanes.accel.process to obtain 
 
 nhanes.accel.process()
 
-2. Adjust certain data processing parameters. For example, only include participants with 4 or more valid days of monitoring, and request that physical activity averages are calculated for all days as well as weekdays and weekend days:
+2. Specify certain data processing parameters. For example, only include participants with 4 or more valid days of monitoring, remove the condition that days with more than 1200 minutes of weartime are excluded, and request that physical activity averages are calculated for all days as well as weekdays and weekend days:
 
-nhanes.accel.process(valid.days=4, weekday.weekend=TRUE)
+nhanes.accel.process(valid.days=4, weartime.maximum=1440, weekday.weekend=TRUE)
 
 3. Replicate the NCI SAS programs (see reference 2). The following code produces a .csv file with the same variables that the NCI SAS programs generate (plus some extras), using the exact same data processing methods:
 
