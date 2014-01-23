@@ -10,8 +10,8 @@ This function calculates a variety of physical activity variables from the time-
 nhanes.accel.process(waves = 3, directory = getwd(), brevity = 1, valid.days = 1, 
 valid.week.days = 0, valid.weekend.days = 0, int.cuts = c(100, 760, 2020, 5999), 
 youth.mod.cuts = rep(int.cuts[3], 12), youth.vig.cuts = rep(int.cuts[4], 12), 
-save.dayfile = FALSE, days.distinct = FALSE, nonwear.window = 60, nonwear.tol = 0, 
-nonwear.tol.upper = 99, nonwear.nci = FALSE, weartime.minimum = 600, 
+save.dayfile = FALSE, cpm.nci=FALSE, days.distinct = FALSE, nonwear.window = 60, 
+nonwear.tol = 0, nonwear.tol.upper = 99, nonwear.nci = FALSE, weartime.minimum = 600, 
 weartime.maximum = 1200, use.partialdays = FALSE, active.bout.length = 10, 
 active.bout.tol = 0, mvpa.bout.tol.lower = 0, vig.bout.tol.lower = 0, 
 active.bout.nci = FALSE, sed.bout.tol = 0, sed.bout.tol.maximum = int.cuts[2] - 1, 
@@ -48,6 +48,9 @@ Vector of 12 count cut-points for vigorous physical activity in youth. The 1st v
   \item{save.dayfile}{
 If TRUE, function writes a .csv file with physical activity variables for each day of monitoring for each participant (in addition to the .csv file with daily averages). If FALSE, function only writes the .csv file with daily averages.
 }
+  \item{cpm.nci}{
+If TRUE, average counts per minute is calculated by dividing average daily counts by average daily weartime, as opposed to averaging each day's counts per minute value. In general, leave as FALSE unless you want to replicate the NCI SAS programs (see reference 2).
+  }
   \item{days.distinct}{
 If TRUE, treat each day of data as distinct, i.e. identify non-wear time and activity bouts in day 1, then day 2, etc.; If FALSE, apply algorithms on continuous basis for full monitoring period.
 }
@@ -132,13 +135,23 @@ If the user allows for a tolerance in bout detection (e.g. active.bout.tol=2) an
 
 NHANES uses a complex, multi-stage, probability sampling design, and all statistical analysis should account for its design features. The dataset produced by nhanes.accel.process includes the variables wtmec2yr_adj and wtmec4yr_adj. If only data from one wave of NHANES is used (i.e. 2003-2004 OR 2005-2006), the appropriate weight variable is wtmec2yr_adj. If data from both NHANES 2003-2004 and NHANES 2005-2006 is used, the appropriate weight variable is wtmec4yr_adj. Note that analyses must also include the variables strata and primary sampling unit (PSU), which are in the NHANES Demographics files along with other important variables like gender, age, race/ethnicity, etc.
 
-Users who wish to replicate the NCI SAS programs (see reference 2) should run the following code:
+There are essentially three strategies for using nhanes.accel.process to obtain a dataset for statistical analysis:
+
+1. Use default settings for all data processing parameters. Just type the following code in R:
+
+nhanes.accel.process()
+
+2. Adjust certain data processing parameters. For example, only include participants with 4 or more valid days of monitoring, and request that physical activity averages are calculated for all days as well as weekdays and weekend days:
+
+nhanes.accel.process(valid.days=4, weekday.weekend=TRUE)
+
+3. Replicate the NCI SAS programs (see reference 2). The following code produces a .csv file with the same variables that the NCI SAS programs generate (plus some extras), using the exact same data processing methods:
 
 youthmod = c(1400,1515,1638,1770,1910,2059,2220,2393,2580,2781,3000,3239)
-
 youthvig = c(3758,3947,4147,4360,4588,4832,5094,5375,5679,6007,6363,6751)
+nhanes.accel.process(waves=1, brevity=2, youth.mod.cuts=youthmod, youth.vig.cuts=youthvig, cpm.nci=TRUE, days.distinct=TRUE,nonwear.tol=2, nonwear.tol.upper=100, nonwear.nci=TRUE, weartime.maximum=1440, active.bout.tol=2, active.bout.nci=TRUE,artifact.thresh=32767,artifact.action=3))
 
-nhanes.accel.process(waves=3, brevity=2, youth.mod.cuts=youthmod, youth.vig.cuts=youthvig, days.distinct=TRUE,nonwear.tol=2, nonwear.tol.upper=100, nonwear.nci=TRUE, weartime.maximum=1440, active.bout.tol=2, active.bout.nci=TRUE,artifact.thresh=32767,artifact.action=3))
+Of course you could set waves=3 to process 2003-2004 and 2005-2006 data rather than just 2003-2004.
 
 Some additional information on the package nhanesaccel and its functions can be found on Dane's website, \url{https://sites.google.com/site/danevandomelen/}.
 }
