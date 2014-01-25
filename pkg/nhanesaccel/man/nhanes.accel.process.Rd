@@ -107,7 +107,27 @@ If TRUE, function computes physical activity averages for weekdays and weekend d
 }
 }
 \details{
-NA
+There are essentially three strategies for using nhanes.accel.process to obtain a dataset for statistical analysis:
+
+1. Use default settings for all data processing parameters. Just type the following code in R:
+
+nhanes.accel.process()
+
+2. Specify certain data processing parameters. For example, only include participants with 4 or more valid days of monitoring, remove the condition that days with more than 1200 minutes of weartime are excluded, and request that physical activity averages are calculated for all days as well as weekdays and weekend days:
+
+nhanes.accel.process(valid.days=4, weartime.maximum=1440, weekday.weekend=TRUE)
+
+3. Replicate the NCI SAS programs (see reference 2). The following code produces a .csv file with the same variables that the NCI SAS programs generate (plus some extras), using the exact same data processing methods:
+
+youthmod = c(1400,1515,1638,1770,1910,2059,2220,2393,2580,2781,3000,3239)
+
+youthvig = c(3758,3947,4147,4360,4588,4832,5094,5375,5679,6007,6363,6751)
+
+nhanes.accel.process(waves=1, brevity=2, youth.mod.cuts=youthmod, youth.vig.cuts=youthvig, cpm.nci=TRUE, days.distinct=TRUE,nonwear.tol=2, nonwear.tol.upper=100, nonwear.nci=TRUE, weartime.maximum=1440, active.bout.tol=2, active.bout.nci=TRUE,artifact.thresh=32767,artifact.action=3))
+
+Of course you could set waves=3 to process 2003-2004 and 2005-2006 data rather than just 2003-2004. 
+
+The variables generated using the NCI SAS programs correspond to the variables generated using the above code as follows: valdays/valid_days, valid_person/include, allmean_mv/mvpa_bouted, allmean_mv1/mvpa_min, allmean_m1/mod_min, allmean_v/vig_min, allmean_v1/vig_min, and allmean_cnt_wr/cpm. All values are identical using either program. The only difference is that the SAS programs include data on 9 more participants who had potentially unreliable data. Excluding these participants is considered acceptable by the NCI (see reference 2).
 }
 \value{
 No object is returned. Function writes .csv file(s) to specified directory (by default, the current working directory).
@@ -134,24 +154,6 @@ There is no perfect solution for dealing with abnormally high count values, also
 If the user allows for a tolerance in bout detection (e.g. active.bout.tol=2) and does not use the NCI algorithm (active.bout.nci=FALSE), specifying non-zero values for mvpa.bout.tol.lower and vig.bout.tol.lower is highly recommended. Otherwise the algorithm will tend to classify minutes immediately before and after an activity bout as being part of the bout.
 
 NHANES uses a complex, multi-stage, probability sampling design, and all statistical analysis should account for its design features. The dataset produced by nhanes.accel.process includes the variables wtmec2yr_adj and wtmec4yr_adj. If only data from one wave of NHANES is used (i.e. 2003-2004 OR 2005-2006), the appropriate weight variable is wtmec2yr_adj. If data from both NHANES 2003-2004 and NHANES 2005-2006 is used, the appropriate weight variable is wtmec4yr_adj. Note that analyses must also include the variables strata and primary sampling unit (PSU), which are in the NHANES Demographics files along with other important variables like gender, age, race/ethnicity, etc.
-
-There are essentially three strategies for using nhanes.accel.process to obtain a dataset for statistical analysis:
-
-1. Use default settings for all data processing parameters. Just type the following code in R:
-
-nhanes.accel.process()
-
-2. Specify certain data processing parameters. For example, only include participants with 4 or more valid days of monitoring, remove the condition that days with more than 1200 minutes of weartime are excluded, and request that physical activity averages are calculated for all days as well as weekdays and weekend days:
-
-nhanes.accel.process(valid.days=4, weartime.maximum=1440, weekday.weekend=TRUE)
-
-3. Replicate the NCI SAS programs (see reference 2). The following code produces a .csv file with the same variables that the NCI SAS programs generate (plus some extras), using the exact same data processing methods:
-
-youthmod = c(1400,1515,1638,1770,1910,2059,2220,2393,2580,2781,3000,3239)
-youthvig = c(3758,3947,4147,4360,4588,4832,5094,5375,5679,6007,6363,6751)
-nhanes.accel.process(waves=1, brevity=2, youth.mod.cuts=youthmod, youth.vig.cuts=youthvig, cpm.nci=TRUE, days.distinct=TRUE,nonwear.tol=2, nonwear.tol.upper=100, nonwear.nci=TRUE, weartime.maximum=1440, active.bout.tol=2, active.bout.nci=TRUE,artifact.thresh=32767,artifact.action=3))
-
-Of course you could set waves=3 to process 2003-2004 and 2005-2006 data rather than just 2003-2004.
 
 Some additional information on the package nhanesaccel and its functions can be found on Dane's website, \url{https://sites.google.com/site/danevandomelen/}.
 }
