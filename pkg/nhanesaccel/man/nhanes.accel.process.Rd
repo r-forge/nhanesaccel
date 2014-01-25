@@ -127,7 +127,7 @@ nhanes.accel.process(waves=1, brevity=2, youth.mod.cuts=youthmod, youth.vig.cuts
 
 Of course you could set waves=3 to process 2003-2004 and 2005-2006 data rather than just 2003-2004. 
 
-The variables generated using the NCI SAS programs correspond to the variables generated using the above code as follows: valdays/valid_days, valid_person/include, allmean_mv/mvpa_bouted, allmean_mv1/mvpa_min, allmean_m1/mod_min, allmean_v/vig_min, allmean_v1/vig_min, and allmean_cnt_wr/cpm. All values are identical using either program. The only difference is that the SAS programs include data on 9 more participants who had potentially unreliable data. Excluding these participants is considered acceptable by the NCI (see reference 2).
+The variables generated using the NCI SAS programs correspond to the variables generated using the above code as follows: valdays/valid_days, valid_person/include, allmean_mv/mvpa_bouted, allmean_mv1/mvpa_min, allmean_m1/mod_min, allmean_v/vig_bouted, allmean_v1/vig_min, and allmean_cnt_wr/cpm. All values are identical using either program. The only difference is that the SAS programs include data on 9 more participants who had potentially unreliable data. Excluding these participants is considered acceptable by the NCI (see reference 2).
 }
 \value{
 No object is returned. Function writes .csv file(s) to specified directory (by default, the current working directory).
