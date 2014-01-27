@@ -7,15 +7,15 @@ Process NHANES 2003-2006 accelerometer data
 This function calculates a variety of physical activity variables from the time-series accelerometer data in NHANES 2003-2006. The function produces a summary .csv file, which by default is written to the user's working directory. A data dictionary for the variables generated is available on Dane's website, \url{https://sites.google.com/site/danevandomelen/}.
 }
 \usage{
-nhanes.accel.process(waves = 3, directory = getwd(), brevity = 1, valid.days = 1, 
-valid.week.days = 0, valid.weekend.days = 0, int.cuts = c(100, 760, 2020, 5999), 
-youth.mod.cuts = rep(int.cuts[3], 12), youth.vig.cuts = rep(int.cuts[4], 12), 
-save.dayfile = FALSE, cpm.nci=FALSE, days.distinct = FALSE, nonwear.window = 60, 
-nonwear.tol = 0, nonwear.tol.upper = 99, nonwear.nci = FALSE, weartime.minimum = 600, 
-weartime.maximum = 1200, use.partialdays = FALSE, active.bout.length = 10, 
-active.bout.tol = 0, mvpa.bout.tol.lower = 0, vig.bout.tol.lower = 0, 
-active.bout.nci = FALSE, sed.bout.tol = 0, sed.bout.tol.maximum = int.cuts[2] - 1, 
-artifact.thresh = 25000, artifact.action = 1, weekday.weekend = FALSE)
+nhanes.accel.process(waves=3, directory=getwd(), brevity=1, valid.days=1, 
+valid.week.days=0, valid.weekend.days=0, int.cuts=c(100, 760, 2020, 5999), 
+youth.mod.cuts=rep(int.cuts[3], 12), youth.vig.cuts=rep(int.cuts[4], 12), 
+save.dayfile=FALSE, cpm.nci=FALSE, days.distinct=FALSE, nonwear.window=60, 
+nonwear.tol=0, nonwear.tol.upper=99, nonwear.nci=FALSE, weartime.minimum=600, 
+weartime.maximum=1200, use.partialdays=FALSE, active.bout.length=10, 
+active.bout.tol=0, mvpa.bout.tol.lower=0, vig.bout.tol.lower=0, 
+active.bout.nci=FALSE, sed.bout.tol=0, sed.bout.tol.maximum=int.cuts[2]-1, 
+artifact.thresh=25000, artifact.action=1, weekday.weekend=FALSE)
 }
 \arguments{
   \item{waves}{
@@ -123,7 +123,7 @@ youthmod = c(1400,1515,1638,1770,1910,2059,2220,2393,2580,2781,3000,3239)
 
 youthvig = c(3758,3947,4147,4360,4588,4832,5094,5375,5679,6007,6363,6751)
 
-nhanes.accel.process(waves=1, brevity=2, youth.mod.cuts=youthmod, youth.vig.cuts=youthvig, cpm.nci=TRUE, days.distinct=TRUE,nonwear.tol=2, nonwear.tol.upper=100, nonwear.nci=TRUE, weartime.maximum=1440, active.bout.tol=2, active.bout.nci=TRUE,artifact.thresh=32767,artifact.action=3))
+nhanes.accel.process(waves=1, brevity=2, youth.mod.cuts=youthmod, youth.vig.cuts=youthvig, cpm.nci=TRUE, days.distinct=TRUE,nonwear.tol=2, nonwear.tol.upper=100, nonwear.nci=TRUE, weartime.maximum=1440, active.bout.tol=2, active.bout.nci=TRUE, artifact.thresh=32767, artifact.action=3))
 
 Of course you could set waves=3 to process 2003-2004 and 2005-2006 data rather than just 2003-2004. 
 
