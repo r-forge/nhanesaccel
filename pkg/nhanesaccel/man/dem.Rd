@@ -5,57 +5,57 @@
 NHANES 2003-2006 demographics data
 }
 \description{
-Includes 45 demographic variables from NHANES 2003-2006.
+Includes 45 demographic variables.
 }
 \usage{data(dem)}
 \format{
   A data frame with 20470 observations on the following 45 variables.
   \describe{
-    \item{\code{SEQN}}{a numeric vector}
-    \item{\code{SDDSRVYR}}{a numeric vector}
-    \item{\code{RIDSTATR}}{a numeric vector}
-    \item{\code{RIDEXMON}}{a numeric vector}
-    \item{\code{RIAGENDR}}{a numeric vector}
-    \item{\code{RIDAGEYR}}{a numeric vector}
-    \item{\code{RIDAGEMN}}{a numeric vector}
-    \item{\code{RIDAGEEX}}{a numeric vector}
-    \item{\code{RIDRETH1}}{a numeric vector}
-    \item{\code{DMQMILIT}}{a numeric vector}
-    \item{\code{DMDBORN}}{a numeric vector}
-    \item{\code{DMDCITZN}}{a numeric vector}
-    \item{\code{DMDYRSUS}}{a numeric vector}
-    \item{\code{DMDEDUC3}}{a numeric vector}
-    \item{\code{DMDEDUC2}}{a numeric vector}
-    \item{\code{DMDSCHOL}}{a numeric vector}
-    \item{\code{DMDMARTL}}{a numeric vector}
-    \item{\code{DMDHHSIZ}}{a numeric vector}
-    \item{\code{INDHHINC}}{a numeric vector}
-    \item{\code{INDFMINC}}{a numeric vector}
-    \item{\code{INDFMPIR}}{a numeric vector}
-    \item{\code{RIDEXPRG}}{a numeric vector}
-    \item{\code{DMDHRGND}}{a numeric vector}
-    \item{\code{DMDHRAGE}}{a numeric vector}
-    \item{\code{DMDHRBRN}}{a numeric vector}
-    \item{\code{DMDHREDU}}{a numeric vector}
-    \item{\code{DMDHRMAR}}{a numeric vector}
-    \item{\code{DMDHSEDU}}{a numeric vector}
-    \item{\code{SIALANG}}{a numeric vector}
-    \item{\code{SIAPROXY}}{a numeric vector}
-    \item{\code{SIAINTRP}}{a numeric vector}
-    \item{\code{FIALANG}}{a numeric vector}
-    \item{\code{FIAPROXY}}{a numeric vector}
-    \item{\code{FIAINTRP}}{a numeric vector}
-    \item{\code{MIALANG}}{a numeric vector}
-    \item{\code{MIAPROXY}}{a numeric vector}
-    \item{\code{MIAINTRP}}{a numeric vector}
-    \item{\code{AIALANG}}{a numeric vector}
-    \item{\code{WTINT2YR}}{a numeric vector}
-    \item{\code{WTMEC2YR}}{a numeric vector}
-    \item{\code{SDMVPSU}}{a numeric vector}
-    \item{\code{SDMVSTRA}}{a numeric vector}
-    \item{\code{RIDRETH2}}{a numeric vector}
-    \item{\code{DMDEDUC}}{a numeric vector}
-    \item{\code{DMDFMSIZ}}{a numeric vector}
+    \item{\code{seqn}}{a numeric vector}
+    \item{\code{sddsrvyr}}{a numeric vector}
+    \item{\code{ridstatr}}{a numeric vector}
+    \item{\code{ridexmon}}{a numeric vector}
+    \item{\code{riagendr}}{a numeric vector}
+    \item{\code{ridageyr}}{a numeric vector}
+    \item{\code{ridagemn}}{a numeric vector}
+    \item{\code{ridageex}}{a numeric vector}
+    \item{\code{ridreth1}}{a numeric vector}
+    \item{\code{dmqmilit}}{a numeric vector}
+    \item{\code{dmdborn}}{a numeric vector}
+    \item{\code{dmdcitzn}}{a numeric vector}
+    \item{\code{dmdyrsus}}{a numeric vector}
+    \item{\code{dmdeduc3}}{a numeric vector}
+    \item{\code{dmdeduc2}}{a numeric vector}
+    \item{\code{dmdschol}}{a numeric vector}
+    \item{\code{dmdmartl}}{a numeric vector}
+    \item{\code{dmdhhsiz}}{a numeric vector}
+    \item{\code{indhhinc}}{a numeric vector}
+    \item{\code{indfminc}}{a numeric vector}
+    \item{\code{indfmpir}}{a numeric vector}
+    \item{\code{ridexprg}}{a numeric vector}
+    \item{\code{dmdhrgnd}}{a numeric vector}
+    \item{\code{dmdhrage}}{a numeric vector}
+    \item{\code{dmdhrbrn}}{a numeric vector}
+    \item{\code{dmdhredu}}{a numeric vector}
+    \item{\code{dmdhrmar}}{a numeric vector}
+    \item{\code{dmdhsedu}}{a numeric vector}
+    \item{\code{sialang}}{a numeric vector}
+    \item{\code{siaproxy}}{a numeric vector}
+    \item{\code{siaintrp}}{a numeric vector}
+    \item{\code{fialang}}{a numeric vector}
+    \item{\code{fiaproxy}}{a numeric vector}
+    \item{\code{fiaintrp}}{a numeric vector}
+    \item{\code{mialang}}{a numeric vector}
+    \item{\code{miaproxy}}{a numeric vector}
+    \item{\code{miaintrp}}{a numeric vector}
+    \item{\code{aialang}}{a numeric vector}
+    \item{\code{wtint2yr}}{a numeric vector}
+    \item{\code{wtmec2yr}}{a numeric vector}
+    \item{\code{sdmvpsu}}{a numeric vector}
+    \item{\code{sdmvstra}}{a numeric vector}
+    \item{\code{ridreth2}}{a numeric vector}
+    \item{\code{dmdeduc}}{a numeric vector}
+    \item{\code{dmdfmsiz}}{a numeric vector}
   }
 }
 \details{
