@@ -8,14 +8,15 @@ This function calculates a variety of physical activity variables from the time-
 }
 \usage{
 nhanes.accel.process(waves=3, directory=getwd(), brevity=1, valid.days=1, 
-valid.week.days=0, valid.weekend.days=0, int.cuts=c(100, 760, 2020, 5999), 
-youth.mod.cuts=rep(int.cuts[3], 12), youth.vig.cuts=rep(int.cuts[4], 12), 
-save.dayfile=FALSE, cpm.nci=FALSE, days.distinct=FALSE, nonwear.window=60, 
-nonwear.tol=0, nonwear.tol.upper=99, nonwear.nci=FALSE, weartime.minimum=600, 
+valid.week.days=0, valid.weekend.days=0, int.cuts=c(100,760,2020,5999), 
+youth.mod.cuts=rep(int.cuts[3],12), youth.vig.cuts=rep(int.cuts[4],12), 
+cpm.nci=FALSE, days.distinct=FALSE, nonwear.window=60, nonwear.tol=0, 
+nonwear.tol.upper=99, nonwear.nci=FALSE, weartime.minimum=600, 
 weartime.maximum=1200, use.partialdays=FALSE, active.bout.length=10, 
 active.bout.tol=0, mvpa.bout.tol.lower=0, vig.bout.tol.lower=0, 
 active.bout.nci=FALSE, sed.bout.tol=0, sed.bout.tol.maximum=int.cuts[2]-1, 
-artifact.thresh=25000, artifact.action=1, weekday.weekend=FALSE)
+artifact.thresh=25000, artifact.action=1, weekday.weekend=FALSE,
+return.form=1, write.csv=TRUE)
 }
 \arguments{
   \item{waves}{
@@ -44,9 +45,6 @@ Vector of 12 count cut-points for moderate physical activity in youth. The 1st v
 }
   \item{youth.vig.cuts}{
 Vector of 12 count cut-points for vigorous physical activity in youth. The 1st value is for participants age 6, 2nd is for participants age 7, ... , and 12th is for participants age 17. If agreement with NCI SAS programs (see reference 2) is desired, user should enter youth.vig.cuts=c(3758,3947,4147,4360,4588,4832,5094,5375,5679,6007,6363,6751).
-}
-  \item{save.dayfile}{
-If TRUE, function writes a .csv file with physical activity variables for each day of monitoring for each participant (in addition to the .csv file with daily averages). If FALSE, function only writes the .csv file with daily averages.
 }
   \item{cpm.nci}{
 If TRUE, average counts per minute is calculated by dividing average daily counts by average daily weartime, as opposed to averaging each day's counts per minute value. In general, leave as FALSE unless you want to replicate the NCI SAS programs (see reference 2).
@@ -105,6 +103,12 @@ If 1, exclude days that have one or more artifacts; if 2, consider artifacts as 
   \item{weekday.weekend}{
 If TRUE, function computes physical activity averages for weekdays and weekend days separately (in addition to daily averages for all valid days, which are computed regardless). If FALSE, function only computes averages for all valid days.
 }
+  \item{return.form}{
+If 1, function returns physical activity variables on per-person basis, i.e. daily averages for each participant; if 2, function returns variables on per-day basis; if 3, function returns both via a list.
+}
+  \item{write.csv}{
+If TRUE, function writes .csv file(s) to directory specified by directory input (by default, the current working directory). The files written are those requested by return.form. If FALSE, no .csv files are written.
+}
 }
 \details{
 There are essentially three strategies for using nhanes.accel.process to obtain a dataset for statistical analysis:
@@ -130,12 +134,12 @@ Of course you could set waves=3 to process 2003-2004 and 2005-2006 data rather t
 The variables generated using the NCI SAS programs correspond to the variables generated using the above code as follows: valdays/valid_days, valid_person/include, allmean_mv/mvpa_bouted, allmean_mv1/mvpa_min, allmean_m1/mod_min, allmean_v/vig_bouted, allmean_v1/vig_min, and allmean_cnt_wr/cpm. All values are identical using either program. The only difference is that the SAS programs include data on 9 more participants who had potentially unreliable data. Excluding these participants is considered acceptable by the NCI (see reference 2).
 }
 \value{
-No object is returned. Function writes .csv file(s) to specified directory (by default, the current working directory).
+A single data frame or a list of two data frames, depending on the value of return.form. Additionally, if write.csv is set to TRUE, the function writes one or two .csv files to specified directory.
 }
 \references{
-1. Centers for Disease Control and Prevention (CDC). National Center for Health Statistics (NCHS). National Health and Nutrition Examination Survey Data. Hyattsville, MD: US Department of Health and Human Services, Centers for Disease Control and Prevention, 2003-6 \url{http://www.cdc.gov/nchs/nhanes/nhanes_questionnaires.htm}. Accessed August 16, 2013.
+1. Centers for Disease Control and Prevention (CDC). National Center for Health Statistics (NCHS). National Health and Nutrition Examination Survey Data. Hyattsville, MD: US Department of Health and Human Services, Centers for Disease Control and Prevention, 2003-6 \url{http://www.cdc.gov/nchs/nhanes/nhanes_questionnaires.htm}. Accessed January 31, 2014.
 
-2. National Cancer Institute. Risk factor monitoring and methods: SAS programs for analyzing NHANES 2003-2004 accelerometer data. Available at: \url{http://riskfactor.cancer.gov/tools/nhanes_pam}. Accessed August 16, 2013.
+2. National Cancer Institute. Risk factor monitoring and methods: SAS programs for analyzing NHANES 2003-2004 accelerometer data. Available at: \url{http://riskfactor.cancer.gov/tools/nhanes_pam}. Accessed January 31, 2014.
 
 Acknowledgment: This material is based upon work supported by the National Science Foundation Graduate Research Fellowship under Grant No. DGE-0940903.
 }
