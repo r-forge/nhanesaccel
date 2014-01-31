@@ -1,13 +1,14 @@
 nhanes.accel.process <-
 function(waves=3, directory=getwd(), brevity=1, valid.days=1, 
          valid.week.days=0, valid.weekend.days=0,int.cuts=c(100,760,2020,5999),
-         youth.mod.cuts=rep(int.cuts[3],12),youth.vig.cuts=rep(int.cuts[4],12),
-         save.dayfile=FALSE, cpm.nci=FALSE, days.distinct=FALSE, nonwear.window=60, 
-         nonwear.tol=0,nonwear.tol.upper=99, nonwear.nci=FALSE, weartime.minimum=600, 
+         youth.mod.cuts=rep(int.cuts[3],12), youth.vig.cuts=rep(int.cuts[4],12),
+         cpm.nci=FALSE, days.distinct=FALSE, nonwear.window=60, nonwear.tol=0,
+         nonwear.tol.upper=99, nonwear.nci=FALSE, weartime.minimum=600, 
          weartime.maximum=1200, use.partialdays=FALSE, active.bout.length=10, 
          active.bout.tol=0, mvpa.bout.tol.lower=0, vig.bout.tol.lower=0, 
          active.bout.nci=FALSE, sed.bout.tol=0, sed.bout.tol.maximum=int.cuts[2]-1, 
-         artifact.thresh = 25000, artifact.action = 1, weekday.weekend=FALSE) {
+         artifact.thresh=25000, artifact.action=1, weekday.weekend=FALSE,
+         return.form=1, write.csv=TRUE) {
   
   # If waves parameter not set to 1, 2, or 3, stop function and output error message to user
   if (sum(waves==c(1,2,3))==0) {
@@ -34,11 +35,6 @@ function(waves=3, directory=getwd(), brevity=1, valid.days=1,
   # If length of youth.mod.cuts or youth.vig.cuts is not 12, or if values are out of range, output error
   if (length(youth.mod.cuts)!=12 | length(youth.vig.cuts)!=12 | min(youth.mod.cuts,youth.vig.cuts)<1 | max(youth.mod.cuts,youth.vig.cuts)>32767) {
     stop("For youth.mod.cuts= and youth.vig.cuts= options, please enter vector of 12 values between 1 and 32767")
-  }
-  
-  # If save.dayfile is not a logical, output error
-  if (!is.logical(save.dayfile)) {
-    stop("For save.dayfile= option, please enter TRUE or FALSE")
   }
   
   # If cpm.nci is not a logical, output error
@@ -134,6 +130,16 @@ function(waves=3, directory=getwd(), brevity=1, valid.days=1,
   # If weekday.weekend is not a logical, output error
   if (!is.logical(weekday.weekend)) {
     stop("For weekday.weekend= option, please enter TRUE or FALSE")
+  }
+  
+  # If return.form is out of range, output error
+  if (!return.form %in% c(1,2,3)) {
+    stop("For return.form= option, please enter 1 for per-person, 2 for per-day, or 3 for both")
+  }
+  
+  # If write.csv is not a logical, output error
+  if (!is.logical(write.csv)) {
+    stop("For write.csv= option, please enter TRUE or FALSE")
   }
   
   # Save user-defined int.cuts in variable int.cuts.original
@@ -714,8 +720,8 @@ function(waves=3, directory=getwd(), brevity=1, valid.days=1,
     personaves = rbind(personaves1,personaves2)
   }
   
-  # Write .csv file with day-to-day variables if requested
-  if (save.dayfile==TRUE) {
+  # Prepare data frame with day-to-day variables if requested
+  if (return.form %in% c(2,3)) {
     
     # Add variable indicating which NHANES wave each participant is from
     dayvars = cbind(dayvars[,1],rep(NA,nrow(dayvars)),dayvars[,2:66])
@@ -742,68 +748,128 @@ function(waves=3, directory=getwd(), brevity=1, valid.days=1,
     if (brevity==1) {dayvars = dayvars[,1:7]}
     else if (brevity==2) {dayvars = dayvars[,1:43]}
     
-    # Write file with day-to-day variables
-    curdate = as.character(Sys.Date())
-    filename = paste("NHANES_accel_days_",curdate,".csv",sep="")
-    write.csv(x=dayvars,file=filename,quote=FALSE,row.names=FALSE,na="")
   }
   
-  # Add variable names to per-person dataset
-  varnames = c("seqn","nhanes_wave","valid_days","valid_week_days","valid_weekend_days",
-               "include","valid_min","counts","cpm","steps","sed_min","light_min",
-               "life_min","mod_min","vig_min","lightlife_min","mvpa_min",
-               "active_min","sed_percent","light_percent","life_percent",
-               "mod_percent","vig_percent","lightlife_percent","mvpa_percent",
-               "active_percent","sed_counts","light_counts","life_counts",
-               "mod_counts","vig_counts","lightlife_counts","mvpa_counts",
-               "active_counts","sed_bouted_10min","sed_bouted_30min",
-               "sed_bouted_60min","sed_breaks","max_1min_counts","max_5min_counts",
-               "max_10min_counts","max_30min_counts","mvpa_bouted","vig_bouted",
-               "guideline_min","cpm_hour1","cpm_hour2","cpm_hour3","cpm_hour4","cpm_hour5",
-               "cpm_hour6","cpm_hour7","cpm_hour8","cpm_hour9","cpm_hour10","cpm_hour11",
-               "cpm_hour12","cpm_hour13","cpm_hour14","cpm_hour15","cpm_hour16",
-               "cpm_hour17","cpm_hour18","cpm_hour19","cpm_hour20","cpm_hour21",
-               "cpm_hour22","cpm_hour23","cpm_hour24")
-  varnames = c(varnames,paste("wk_",varnames[7:69],sep=""),paste("we_",varnames[7:69],sep=""),"wtmec2yr_adj","wtmec4yr_adj")
-  colnames(personaves) = varnames
+  # Prepare data frame with daily averages if requested
+  if (return.form %in% c(1,3)) {
   
-  # Drop variables according to brevity and weekday.weekend settings
-  if (brevity==1) {
-    if (weekday.weekend==TRUE) {personaves = personaves[,c(1:9,70:72,133:135,196:197)]}
-    else {personaves = personaves[,c(1:9,196:197)]}
-  } else if (brevity==2) {
-    if (weekday.weekend==TRUE) {personaves = personaves[,c(1:45,70:108,133:171,196:197)]}
-    else {personaves = personaves[,c(1:45,196:197)]}
-  } else if (brevity==3) {
-    if (weekday.weekend==FALSE) {personaves = personaves[,c(1:69,196:197)]}
+    # Add variable names to per-person dataset
+    varnames = c("seqn","nhanes_wave","valid_days","valid_week_days","valid_weekend_days",
+                 "include","valid_min","counts","cpm","steps","sed_min","light_min",
+                 "life_min","mod_min","vig_min","lightlife_min","mvpa_min",
+                 "active_min","sed_percent","light_percent","life_percent",
+                 "mod_percent","vig_percent","lightlife_percent","mvpa_percent",
+                 "active_percent","sed_counts","light_counts","life_counts",
+                 "mod_counts","vig_counts","lightlife_counts","mvpa_counts",
+                 "active_counts","sed_bouted_10min","sed_bouted_30min",
+                 "sed_bouted_60min","sed_breaks","max_1min_counts","max_5min_counts",
+                 "max_10min_counts","max_30min_counts","mvpa_bouted","vig_bouted",
+                 "guideline_min","cpm_hour1","cpm_hour2","cpm_hour3","cpm_hour4","cpm_hour5",
+                 "cpm_hour6","cpm_hour7","cpm_hour8","cpm_hour9","cpm_hour10","cpm_hour11",
+                 "cpm_hour12","cpm_hour13","cpm_hour14","cpm_hour15","cpm_hour16",
+                 "cpm_hour17","cpm_hour18","cpm_hour19","cpm_hour20","cpm_hour21",
+                 "cpm_hour22","cpm_hour23","cpm_hour24")
+    varnames = c(varnames,paste("wk_",varnames[7:69],sep=""),paste("we_",varnames[7:69],sep=""),"wtmec2yr_adj","wtmec4yr_adj")
+    colnames(personaves) = varnames
+    
+    # Drop variables according to brevity and weekday.weekend settings
+    if (brevity==1) {
+      if (weekday.weekend==TRUE) {personaves = personaves[,c(1:9,70:72,133:135,196:197)]}
+      else {personaves = personaves[,c(1:9,196:197)]}
+    } else if (brevity==2) {
+      if (weekday.weekend==TRUE) {personaves = personaves[,c(1:45,70:108,133:171,196:197)]}
+      else {personaves = personaves[,c(1:45,196:197)]}
+    } else if (brevity==3) {
+      if (weekday.weekend==FALSE) {personaves = personaves[,c(1:69,196:197)]}
+    }
+    
+    # If cpm.nci is TRUE, re-calculate averages for cpm
+    if (cpm.nci==TRUE) {
+      personaves[,"cpm"] = personaves[,"counts"]/personaves[,"valid_min"]
+    }
+    
   }
   
-  # If cpm.nci is TRUE, re-calculate averages for cpm
-  if (cpm.nci==TRUE) {
-    personaves[,"cpm"] = personaves[,"counts"]/personaves[,"valid_min"]
+  # Write .csv file(s) according to write.csv and return.form
+  if (write.csv==TRUE) {
+    
+    # Get date for filename
+    curdate = as.character(strftime(Sys.Date(), format="%Y-%m-%d"))
+    
+    # Write per-day file if requested
+    if (return.form %in% c(2,3)) {
+      dayfile = paste("accel_days_",curdate,".csv",sep="")
+      if (file.exists(dayfile)) {
+        reps = 1
+        repeat {
+          reps = reps + 1
+          daytest = paste(dayfile,reps,sep="_")
+          if (!file.exists(daytest)) {
+            dayfile = daytest
+            break
+          }
+        }
+      }
+      write.csv(x=dayvars,file=dayfile,quote=FALSE,row.names=FALSE,na="")
+    }
+    
+    # Write per-person file if requested
+    if (return.form %in% c(1,3)) {
+      personfile = paste("accel_aves_",curdate,".csv",sep="")
+      if (file.exists(personfile)) {
+        reps = 1
+        repeat {
+          reps = reps + 1
+          persontest = paste(personfile,reps,sep="_")
+          if (!file.exists(persontest)) {
+            personfile = persontest
+            break
+          }
+        }
+      }
+      write.csv(x=personaves,file=personfile,quote=FALSE,row.names=FALSE,na="")
+    }
+  
+    # Write .csv file with function settings
+    settings = c("waves",waves,"valid.days",valid.days,"valid.week.days",valid.week.days,
+                 "valid.weekend.days",valid.weekend.days,"int.cuts",int.cuts,
+                 "youth.mod.cuts",youth.mod.cuts,"youth.vig.cuts",youth.vig.cuts,
+                 "cpm.nci",cpm.nci,"days.distinct",days.distinct,"nonwear.window",nonwear.window,
+                 "nonwear.tol",nonwear.tol,"nonwear.tol.upper",nonwear.tol.upper,
+                 "nonwear.nci",nonwear.nci,"weartime.minimum",weartime.minimum,
+                 "weartime.maximum",weartime.maximum,"use.partialdays",use.partialdays,
+                 "active.bout.length",active.bout.length,"active.bout.tol",active.bout.tol,
+                 "mvpa.bout.tol.lower",mvpa.bout.tol.lower,"vig.bout.tol.lower",vig.bout.tol.lower,
+                 "active.bout.nci",active.bout.nci,"sed.bout.tol",sed.bout.tol,
+                 "sed.bout.tol.maximum",sed.bout.tol.maximum,"artifact.thresh",artifact.thresh,
+                 "artifact.action",artifact.action)
+    settings = as.data.frame(settings)
+    colnames(settings) = NULL
+    settingsfile = paste("settings_",curdate,".csv",sep="")
+    if (file.exists(settingsfile)) {
+      reps = 1
+      repeat {
+        reps = reps + 1
+        settingstest = paste(settingsfile,reps,sep="_")
+        if (!file.exists(settingstest)) {
+          settingsfile = settingstest
+          break
+        }
+      }
+    }
+    write.csv(x=settings,file=settingsfile,quote=FALSE,row.names=FALSE)
+  
+    # Print message to user
+    print(paste("Please see",directory,"for .csv file(s) with NHANES physical activity variables."))
   }
   
-  # Write file with daily averages
-  curdate = as.character(Sys.Date())
-  filename = paste("NHANES_accel_",curdate,".csv",sep="")
-  write.csv(x=personaves,file=filename,quote=FALSE,row.names=FALSE,na="")
-  
-  # Write .csv file with function settings
-  settings = c("waves",waves,"valid.days",valid.days,"valid.week.days",valid.week.days,
-    "valid.weekend.days",valid.weekend.days,"int.cuts",int.cuts,"youth.mod.cuts",youth.mod.cuts,"youth.vig.cuts",
-    youth.vig.cuts,"days.distinct",days.distinct,"nonwear.window",nonwear.window,"nonwear.tol",nonwear.tol,
-    "nonwear.tol.upper",nonwear.tol.upper,"nonwear.nci",nonwear.nci,"weartime.minimum",weartime.minimum,
-    "weartime.maximum",weartime.maximum,"use.partialdays",use.partialdays,"active.bout.length",active.bout.length,
-    "active.bout.tol",active.bout.tol,"active.bout.nci",active.bout.nci,"mvpa.bout.tol.lower",mvpa.bout.tol.lower,
-    "vig.bout.tol.lower",vig.bout.tol.lower,"sed.bout.tol",sed.bout.tol,"sed.bout.tol.maximum",sed.bout.tol.maximum,
-    "artifact.thresh",artifact.thresh,"artifact.action",artifact.action)
-  settings = as.data.frame(settings)
-  colnames(settings) = NULL
-  filename = paste("NHANES_settings_",curdate,".csv",sep="")
-  write.csv(x=settings,file="settings.csv",quote=FALSE,row.names=FALSE)
-  
-  # Return message to user
-  message = paste("A dataset with physical activity variables has been created. Please see",directory,"for the .csv file(s). Thanks for using nhanesaccel.")
-  return(message)
+  # Return data frame(s)
+  if (return.form==1) {
+    return(personaves)
+  } else if (return.form==2) {
+    return (dayvars)
+  } else if (return.form==3) {
+    retlist = list(personaves=personaves, dayvars=dayvars)
+  }
   
 }
