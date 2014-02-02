@@ -32,7 +32,7 @@ The function generates a variable called wtmec2yr_adj. This is the appropriate w
 Matrix identical to input object, but with an extra variable, wtmec2yr_adj.
 }
 \references{
-National Cancer Institute. Risk factor monitoring and methods: SAS programs for analyzing NHANES 2003-2004 accelerometer data. Available at: \url{http://riskfactor.cancer.gov/tools/nhanes_pam}. Accessed August 16, 2013.
+1. National Cancer Institute. Risk factor monitoring and methods: SAS programs for analyzing NHANES 2003-2004 accelerometer data. Available at: \url{http://riskfactor.cancer.gov/tools/nhanes_pam}. Accessed February 1, 2014.
 
 Acknowledgment: This material is based upon work supported by the National Science Foundation Graduate Research Fellowship under Grant No. DGE-0940903.
 }
@@ -40,7 +40,7 @@ Acknowledgment: This material is based upon work supported by the National Scien
 Dane R. Van Domelen, W. Stephen Pittard, and Tamara B. Harris
 }
 \note{
-This function essentially replicates the NCI SAS program reweight.pam (see reference).
+This function essentially replicates the NCI SAS program reweight.pam [1].
 
 Some additional information on the package nhanesaccel and its functions can be found on Dane's website, \url{https://sites.google.com/site/danevandomelen/}.
 }

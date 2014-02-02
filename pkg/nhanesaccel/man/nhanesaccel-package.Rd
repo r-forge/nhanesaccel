@@ -12,8 +12,8 @@ This package contains functions for processing accelerometer data from the Natio
 \tabular{ll}{
 Package: \tab nhanesaccel\cr
 Type: \tab Package\cr
-Version: \tab 1.0\cr
-Date: \tab 2013-08-16\cr
+Version: \tab 1.2\cr
+Date: \tab 2014-02-01\cr
 License: \tab GPL-2\cr
 }
 The following functions are contained in the package nhanesaccel:
@@ -29,9 +29,9 @@ Dane R. Van Domelen, W. Stephen Pittard, and Tamara B. Harris
 Maintainer: Dane R. Van Domelen <vandomed@gmail.com>
 }
 \references{
-1. Centers for Disease Control and Prevention (CDC). National Center for Health Statistics (NCHS). National Health and Nutrition Examination Survey Data. Hyattsville, MD: US Department of Health and Human Services, Centers for Disease Control and Prevention, 2003-6 \url{http://www.cdc.gov/nchs/nhanes/nhanes_questionnaires.htm}. Accessed August 16, 2013.
+1. Centers for Disease Control and Prevention (CDC). National Center for Health Statistics (NCHS). National Health and Nutrition Examination Survey Data. Hyattsville, MD: US Department of Health and Human Services, Centers for Disease Control and Prevention, 2003-6 \url{http://www.cdc.gov/nchs/nhanes/nhanes_questionnaires.htm}. Accessed February 1, 2014.
 
-2. National Cancer Institute. Risk factor monitoring and methods: SAS programs for analyzing NHANES 2003-2004 accelerometer data. Available at: \url{http://riskfactor.cancer.gov/tools/nhanes_pam}. Accessed August 16, 2013.
+2. National Cancer Institute. Risk factor monitoring and methods: SAS programs for analyzing NHANES 2003-2004 accelerometer data. Available at: \url{http://riskfactor.cancer.gov/tools/nhanes_pam}. Accessed February 1, 2014.
 
 Acknowledgment: This material is based upon work supported by the National Science Foundation Graduate Research Fellowship under Grant No. DGE-0940903.
 }
