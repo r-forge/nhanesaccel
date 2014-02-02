@@ -16,10 +16,10 @@ Not intended for direct use.
 NA
 }
 \source{
-National Health and Nutrition Examination Survey 2005-2006 (see reference).
+National Health and Nutrition Examination Survey 2005-2006 [1].
 }
 \references{
-Centers for Disease Control and Prevention (CDC). National Center for Health Statistics (NCHS). National Health and Nutrition Examination Survey Data. Hyattsville, MD: US Department of Health and Human Services, Centers for Disease Control and Prevention, 2005-6 \url{http://wwwn.cdc.gov/nchs/nhanes/search/datapage.aspx?Component=Demographics&CycleBeginYear=2005}. Accessed August 16, 2013.
+1. Centers for Disease Control and Prevention (CDC). National Center for Health Statistics (NCHS). National Health and Nutrition Examination Survey Data. Hyattsville, MD: US Department of Health and Human Services, Centers for Disease Control and Prevention, 2005-6 \url{http://wwwn.cdc.gov/nchs/nhanes/search/datapage.aspx?Component=Demographics&CycleBeginYear=2005}. Accessed February 1, 2014.
 }
 \examples{
 NA
