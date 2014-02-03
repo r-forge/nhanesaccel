@@ -165,7 +165,7 @@ acceldata2 <- nhanes.accel.process(valid.days = 4, nonwear.window = 90,
 # Use settings that replicate the NCI's SAS programs
 youthmod <- c(1400,1515,1638,1770,1910,2059,2220,2393,2580,2781,3000,3239)
 youthvig <- c(3758,3947,4147,4360,4588,4832,5094,5375,5679,6007,6363,6751)
-acceldata3 <- nhanes.accel.process(waves = 3, brevity = 2, valid.days = 4,
+acceldata3 <- nhanes.accel.process(waves = 3, brevity = 2, valid.days = 4, 
                                    youth.mod.cuts = youthmod, youth.vig.cuts = youthvig, 
                                    cpm.nci = TRUE, days.distinct = TRUE, nonwear.tol = 2, 
                                    nonwear.tol.upper = 100, nonwear.nci = TRUE, 
