@@ -40,5 +40,21 @@ Acknowledgment: This material is based upon work supported by the National Scien
 \code{\link[accelerometry:accelerometry-package]{accelerometry}}
 }
 \examples{
-NA
+# Process NHANES 2003-2006 data using default settings
+acceldata1 <- nhanes.accel.process(write.csv = FALSE)
+
+# Require 4+ valid days, increase non-wear window to 90, and get weekday/weekend averages
+acceldata2 <- nhanes.accel.process(valid.days = 4, nonwear.window = 90, 
+                                   weekday.weekend = TRUE, write.csv = FALSE)
+
+# Use settings that replicate the NCI's SAS programs
+youthmod <- c(1400,1515,1638,1770,1910,2059,2220,2393,2580,2781,3000,3239)
+youthvig <- c(3758,3947,4147,4360,4588,4832,5094,5375,5679,6007,6363,6751)
+acceldata3 <- nhanes.accel.process(waves = 3, brevity = 2, valid.days = 4, 
+                                   youth.mod.cuts = youthmod, youth.vig.cuts = youthvig, 
+                                   cpm.nci = TRUE, days.distinct = TRUE, nonwear.tol = 2, 
+                                   nonwear.tol.upper = 100, nonwear.nci = TRUE, 
+                                   weartime.maximum = 1440, active.bout.tol = 2, 
+                                   active.bout.nci = TRUE, artifact.thresh = 32767, 
+                                   artifact.action = 3, write.csv = FALSE)
 }
