@@ -193,7 +193,7 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
     data("wave1_ages", envir=environment())
     
     # Initializing matrix to save daily physical activity variables
-    dayvars1 = matrix(NA,ncol=66,nrow=length(ids)*7)
+    dayvars1 = matrix(NA,ncol=68,nrow=length(ids)*7)
     
     # k is the "day counter"
     k = 0
@@ -384,15 +384,26 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
           dayvars1[k,39] = movingaves(x=day.paxinten,window=30,return.max=TRUE,skipchecks=TRUE)
           
           # MVPA and vigorous physical activity in >= 10-min bouts
-          dayvars1[k,40] = sum(day.boutedMVPA)
-          dayvars1[k,41] = sum(day.boutedvig)
-          dayvars1[k,42] = sum(dayvars1[k,40:41])
+          dayvars1[k,42] = sum(day.boutedMVPA)
+          dayvars1[k,43] = sum(day.boutedvig)
+          dayvars1[k,44] = sum(dayvars1[k,42:43])
+          
+          if (dayvars1[k,42]>0) {
+            dayvars1[k,40] = sum(rle2(day.boutedMVPA)[,1]==1)
+          } else {
+            dayvars1[k,40] = 0
+          }
+          if (dayvars1[k,43]>0) {
+            dayvars1[k,41] = sum(rle2(day.boutedMVPA)[,1]==1)
+          } else {
+            dayvars1[k,41] = 0
+          }
           
           if (brevity==3) {
             
             # Hourly counts/min averages
             if (daylength==1440) {
-              dayvars1[k,43:66] = blockaves(x=day.paxinten,window=60,skipchecks=TRUE)
+              dayvars1[k,45:68] = blockaves(x=day.paxinten,window=60,skipchecks=TRUE)
             }
             
           }
