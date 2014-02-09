@@ -124,7 +124,7 @@ There are essentially three strategies for using nhanes.accel.process to obtain 
 3. Replicate the data processing methods used in the NCI's SAS programs [2] The variables generated using the NCI's SAS programs correspond to the variables generated using the code under Examples is as follows: valdays/valid_days, valid_person/include, allmean_mv/mvpa_bouted, allmean_mv1/mvpa_min, allmean_m1/mod_min, allmean_v/vig_bouted, allmean_v1/vig_min, and allmean_cnt_wr/cpm. All values are identical using either program. The only difference is that the SAS programs include data on 9 more participants who had potentially unreliable data. Excluding these participants is considered acceptable by the NCI [2].
 }
 \value{
-A single data frame or a list of two data frames, depending on return.form. Additionally, if write.csv is TRUE, the function writes one or two .csv files to user-specified directory.
+A single data frame or a list of two data frames, depending on return.form. Additionally, unless write.csv is set to FALSE, the function writes one or two .csv files to user-specified directory.
 }
 \references{
 1. Centers for Disease Control and Prevention (CDC). National Center for Health Statistics (NCHS). National Health and Nutrition Examination Survey Data. Hyattsville, MD: US Department of Health and Human Services, Centers for Disease Control and Prevention, 2003-6 \url{http://www.cdc.gov/nchs/nhanes/nhanes_questionnaires.htm}. Accessed February 1, 2014.
