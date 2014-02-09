@@ -155,17 +155,17 @@ Some additional information on the package nhanesaccel and its functions can be 
 \code{\link{nhanes.accel.reweight}}, \code{\link{accel.artifacts}}, \code{\link{accel.bouts}}, \code{\link{accel.intensities}}, \code{\link{accel.sedbreaks}}, \code{\link{accel.weartime}}, \code{\link{movingaves}}, \code{\link{blockaves}}
 }
 \examples{
-# Process NHANES 2003-2006 data using default settings
-acceldata1 <- nhanes.accel.process(write.csv = FALSE)
+# Process NHANES 2003-2004 data using default settings
+acceldata1 <- nhanes.accel.process(waves = 1, write.csv = FALSE)
 
 # Require 4+ valid days, increase non-wear window to 90, and get weekday/weekend averages
-acceldata2 <- nhanes.accel.process(valid.days = 4, nonwear.window = 90, 
+acceldata2 <- nhanes.accel.process(waves = 1, valid.days = 4, nonwear.window = 90, 
                                    weekday.weekend = TRUE, write.csv = FALSE)
 
 # Use settings that replicate the NCI's SAS programs
 youthmod <- c(1400,1515,1638,1770,1910,2059,2220,2393,2580,2781,3000,3239)
 youthvig <- c(3758,3947,4147,4360,4588,4832,5094,5375,5679,6007,6363,6751)
-acceldata3 <- nhanes.accel.process(waves = 3, brevity = 2, valid.days = 4, 
+acceldata3 <- nhanes.accel.process(waves = 1, brevity = 2, valid.days = 4, 
                                    youth.mod.cuts = youthmod, youth.vig.cuts = youthvig, 
                                    cpm.nci = TRUE, days.distinct = TRUE, nonwear.tol = 2, 
                                    nonwear.tol.upper = 100, nonwear.nci = TRUE, 
