@@ -127,14 +127,10 @@ acceldata2 <- nhanes.accel.process(valid.days = 4, nonwear.window = 90,
 3. Replicate the data processing methods used in the NCI's SAS programs [2]. This requires the following code:
 
 youthmod <- c(1400,1515,1638,1770,1910,2059,2220,2393,2580,2781,3000,3239)
+
 youthvig <- c(3758,3947,4147,4360,4588,4832,5094,5375,5679,6007,6363,6751)
-acceldata3 <- nhanes.accel.process(waves = 3, brevity = 2, valid.days = 4, 
-                                   youth.mod.cuts = youthmod, youth.vig.cuts = youthvig, 
-                                   cpm.nci = TRUE, days.distinct = TRUE, nonwear.tol = 2, 
-                                   nonwear.tol.upper = 100, nonwear.nci = TRUE, 
-                                   weartime.maximum = 1440, active.bout.tol = 2, 
-                                   active.bout.nci = TRUE, artifact.thresh = 32767, 
-                                   artifact.action = 3)
+
+acceldata3 <- nhanes.accel.process(waves = 3, brevity = 2, valid.days = 4, youth.mod.cuts = youthmod, youth.vig.cuts = youthvig, cpm.nci = TRUE, days.distinct = TRUE, nonwear.tol = 2, nonwear.tol.upper = 100, nonwear.nci = TRUE, weartime.maximum = 1440, active.bout.tol = 2, active.bout.nci = TRUE, artifact.thresh = 32767, artifact.action = 3)
 
 The variables generated using the code above corresponds to the variables created by the NCI's SAS programs as follows: valid_days/valdays, include/valid_person, mvpa_bouted/allmean_mv, mvpa_min/allmean_mv1, mod_min/allmean_m1, vig_bouted/allmean_v, vig_min/allmean_v1, and cpm/allmean_cnt_wr. All values are identical using either program. The only difference is that the SAS programs include data on 9 more participants who had potentially unreliable data. Excluding these participants is considered acceptable by the NCI [2].
 }
