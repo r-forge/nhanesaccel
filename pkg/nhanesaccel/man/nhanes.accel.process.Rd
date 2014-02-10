@@ -117,11 +117,26 @@ If TRUE, function writes .csv file(s) to user-specified directory (by default, t
 \details{
 There are essentially three strategies for using nhanes.accel.process to obtain a dataset for statistical analysis (see Examples for the corresponding function calls).
 
-1. Use default settings for all data processing parameters, i.e. call nhanes.accel.process(). 
+1. Use default settings for all data processing parameters, i.e. call nhanes.accel.process().
 
 2. Specify certain data processing parameters to take values other than the defaults. For example, only include participants with 4 or more valid days of monitoring, use a 90- rather than 60-minute window for non-wear, and request that physical activity averages are calculated for all days as well as weekdays and weekend days.
 
-3. Replicate the data processing methods used in the NCI's SAS programs [2] The variables generated using the NCI's SAS programs correspond to the variables generated using the code under Examples is as follows: valdays/valid_days, valid_person/include, allmean_mv/mvpa_bouted, allmean_mv1/mvpa_min, allmean_m1/mod_min, allmean_v/vig_bouted, allmean_v1/vig_min, and allmean_cnt_wr/cpm. All values are identical using either program. The only difference is that the SAS programs include data on 9 more participants who had potentially unreliable data. Excluding these participants is considered acceptable by the NCI [2].
+acceldata2 <- nhanes.accel.process(valid.days = 4, nonwear.window = 90, 
+                                   weekday.weekend = TRUE)
+
+3. Replicate the data processing methods used in the NCI's SAS programs [2]. This requires the following code:
+
+youthmod <- c(1400,1515,1638,1770,1910,2059,2220,2393,2580,2781,3000,3239)
+youthvig <- c(3758,3947,4147,4360,4588,4832,5094,5375,5679,6007,6363,6751)
+acceldata3 <- nhanes.accel.process(waves = 3, brevity = 2, valid.days = 4, 
+                                   youth.mod.cuts = youthmod, youth.vig.cuts = youthvig, 
+                                   cpm.nci = TRUE, days.distinct = TRUE, nonwear.tol = 2, 
+                                   nonwear.tol.upper = 100, nonwear.nci = TRUE, 
+                                   weartime.maximum = 1440, active.bout.tol = 2, 
+                                   active.bout.nci = TRUE, artifact.thresh = 32767, 
+                                   artifact.action = 3)
+
+The variables generated using the code above corresponds to the variables created by the NCI's SAS programs as follows: valid_days/valdays, include/valid_person, mvpa_bouted/allmean_mv, mvpa_min/allmean_mv1, mod_min/allmean_m1, vig_bouted/allmean_v, vig_min/allmean_v1, and cpm/allmean_cnt_wr. All values are identical using either program. The only difference is that the SAS programs include data on 9 more participants who had potentially unreliable data. Excluding these participants is considered acceptable by the NCI [2].
 }
 \value{
 A single data frame or a list of two data frames, depending on return.form. Additionally, unless write.csv is set to FALSE, the function writes one or two .csv files to user-specified directory.
@@ -155,23 +170,7 @@ Some additional information on the package nhanesaccel and its functions can be 
 \code{\link{nhanes.accel.reweight}}, \code{\link{accel.artifacts}}, \code{\link{accel.bouts}}, \code{\link{accel.intensities}}, \code{\link{accel.sedbreaks}}, \code{\link{accel.weartime}}, \code{\link{movingaves}}, \code{\link{blockaves}}
 }
 \examples{
-# Process NHANES 2003-2004 data using default settings
-acceldata1 <- nhanes.accel.process(waves = 1, write.csv = FALSE)
-
-# Require 4+ valid days, increase non-wear window to 90, and get weekday/weekend averages
-acceldata2 <- nhanes.accel.process(waves = 1, valid.days = 4, nonwear.window = 90, 
-                                   weekday.weekend = TRUE, write.csv = FALSE)
-
-# Use settings that replicate the NCI's SAS programs
-youthmod <- c(1400,1515,1638,1770,1910,2059,2220,2393,2580,2781,3000,3239)
-youthvig <- c(3758,3947,4147,4360,4588,4832,5094,5375,5679,6007,6363,6751)
-acceldata3 <- nhanes.accel.process(waves = 1, brevity = 2, valid.days = 4, 
-                                   youth.mod.cuts = youthmod, youth.vig.cuts = youthvig, 
-                                   cpm.nci = TRUE, days.distinct = TRUE, nonwear.tol = 2, 
-                                   nonwear.tol.upper = 100, nonwear.nci = TRUE, 
-                                   weartime.maximum = 1440, active.bout.tol = 2, 
-                                   active.bout.nci = TRUE, artifact.thresh = 32767, 
-                                   artifact.action = 3, write.csv = FALSE)
+NA
 }
 \keyword{ NHANES }
 \keyword{ accelerometry }
