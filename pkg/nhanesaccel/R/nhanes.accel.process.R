@@ -429,7 +429,7 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
     personaves1 = nhanes.accel.reweight(acceldata=personaves1,wave=1,seqn.column=1,include.column=5)
     
     # Add variables nhanes_wave and adjusted 4-year MEC weight
-    personaves1 = cbind(personaves1[,1],rep(1,nrow(personaves1)),personaves1[,2:195],personaves1[,195]/2)
+    personaves1 = cbind(personaves1[,1],rep(1,nrow(personaves1)),personaves1[,2:201],personaves1[,201]/2)
   
     # Clear variables   
     rm(wave1_paxstat,wave1_paxcal,wave1_paxday,wave1_paxinten,wave1_ages)
@@ -482,7 +482,7 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
     data("wave2_ages", envir=environment())
     
     # Initializing matrix to save daily physical activity variables
-    dayvars2 = matrix(NA,ncol=66,nrow=length(ids)*7)
+    dayvars2 = matrix(NA,ncol=68,nrow=length(ids)*7)
     
     # k is the "day counter"
     k = 0
@@ -678,15 +678,26 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
           dayvars2[k,39] = movingaves(x=day.paxinten,window=30,return.max=TRUE,skipchecks=TRUE)
           
           # MVPA and vigorous physical activity in >= 10-min bouts
-          dayvars2[k,40] = sum(day.boutedMVPA)
-          dayvars2[k,41] = sum(day.boutedvig)
-          dayvars2[k,42] = sum(dayvars2[k,40:41])
+          dayvars2[k,42] = sum(day.boutedMVPA)
+          dayvars2[k,43] = sum(day.boutedvig)
+          dayvars2[k,44] = sum(dayvars2[k,42:43])
+          
+          if (dayvars2[k,42]>0) {
+            dayvars2[k,40] = sum(rle2(day.boutedMVPA)[,1]==1)
+          } else {
+            dayvars2[k,40] = 0
+          }
+          if (dayvars2[k,43]>0) {
+            dayvars2[k,41] = sum(rle2(day.boutedMVPA)[,1]==1)
+          } else {
+            dayvars2[k,41] = 0
+          }
           
           if (brevity==3) {
             
             # Hourly counts/min averages
             if (daylength==1440) {
-              dayvars2[k,43:66] = blockaves(x=day.paxinten,window=60,skipchecks=TRUE)
+              dayvars2[k,45:68] = blockaves(x=day.paxinten,window=60,skipchecks=TRUE)
             }
             
           }
@@ -712,7 +723,7 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
     personaves2 = nhanes.accel.reweight(acceldata=personaves2,wave=2,seqn.column=1,include.column=5)
     
     # Add variables nhanes_wave and adjusted 4-year MEC weight
-    personaves2 = cbind(personaves2[,1],rep(2,nrow(personaves2)),personaves2[,2:195],personaves2[,195]/2)
+    personaves2 = cbind(personaves2[,1],rep(2,nrow(personaves2)),personaves2[,2:201],personaves2[,201]/2)
     
     # Clear variables
     rm(wave2_paxstat,wave2_paxcal,wave2_paxday,wave2_paxinten,wave2_paxstep,wave2_ages)
@@ -735,29 +746,26 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
   if (return.form %in% c(2,3)) {
     
     # Add variable indicating which NHANES wave each participant is from
-    dayvars = cbind(dayvars[,1],rep(NA,nrow(dayvars)),dayvars[,2:66])
+    dayvars = cbind(dayvars[,1],rep(NA,nrow(dayvars)),dayvars[,2:68])
     dayvars[dayvars[,1]<=31125,2] = 1
     dayvars[dayvars[,1]>31125,2] = 2
     
     # Add variable names to per-day dataset
     colnames(dayvars) = c("seqn","nhanes_wave","day","valid_day","valid_min","counts","cpm","steps","sed_min",
-                          "light_min","life_min","mod_min","vig_min","lightlife_min","mvpa_min",
-                          "active_min","sed_percent","light_percent","life_percent",
-                          "mod_percent","vig_percent","lightlife_percent","mvpa_percent",
-                          "active_percent","sed_counts","light_counts","life_counts",
-                          "mod_counts","vig_counts","lightlife_counts","mvpa_counts",
-                          "active_counts","sed_bouted_10min","sed_bouted_30min",
-                          "sed_bouted_60min","sed_breaks","max_1min_counts","max_5min_counts",
-                          "max_10min_counts","max_30min_counts","mvpa_bouted","vig_bouted",
-                          "guideline_min","cpm_hour1","cpm_hour2","cpm_hour3","cpm_hour4",
-                          "cpm_hour5","cpm_hour6","cpm_hour7","cpm_hour8","cpm_hour9",
-                          "cpm_hour10","cpm_hour11","cpm_hour12","cpm_hour13","cpm_hour14",
-                          "cpm_hour15","cpm_hour16","cpm_hour17","cpm_hour18","cpm_hour19",
-                          "cpm_hour20","cpm_hour21","cpm_hour22","cpm_hour23","cpm_hour24")
+                          "light_min","life_min","mod_min","vig_min","lightlife_min","mvpa_min","active_min",
+                          "sed_percent","light_percent","life_percent","mod_percent","vig_percent",
+                          "lightlife_percent","mvpa_percent","active_percent","sed_counts","light_counts",
+                          "life_counts","mod_counts","vig_counts","lightlife_counts","mvpa_counts","active_counts",
+                          "sed_bouted_10min","sed_bouted_30min","sed_bouted_60min","sed_breaks","max_1min_counts",
+                          "max_5min_counts","max_10min_counts","max_30min_counts","num_mvpa_bouts","num_vig_bouts",
+                          "mvpa_bouted","vig_bouted","guideline_min","cpm_hour1","cpm_hour2","cpm_hour3","cpm_hour4",
+                          "cpm_hour5","cpm_hour6","cpm_hour7","cpm_hour8","cpm_hour9","cpm_hour10","cpm_hour11",
+                          "cpm_hour12","cpm_hour13","cpm_hour14","cpm_hour15","cpm_hour16","cpm_hour17","cpm_hour18",
+                          "cpm_hour19","cpm_hour20","cpm_hour21","cpm_hour22","cpm_hour23","cpm_hour24")
     
     # Drop variables according to brevity setting
-    if (brevity==1) {dayvars = dayvars[,1:7]}
-    else if (brevity==2) {dayvars = dayvars[,1:43]}
+    if (brevity==1) {dayvars = dayvars[,1:8]}
+    else if (brevity==2) {dayvars = dayvars[,1:45]}
     
   }
   
@@ -765,33 +773,37 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
   if (return.form %in% c(1,3)) {
   
     # Add variable names to per-person dataset
-    varnames = c("seqn","nhanes_wave","valid_days","valid_week_days","valid_weekend_days",
-                 "include","valid_min","counts","cpm","steps","sed_min","light_min",
-                 "life_min","mod_min","vig_min","lightlife_min","mvpa_min",
-                 "active_min","sed_percent","light_percent","life_percent",
-                 "mod_percent","vig_percent","lightlife_percent","mvpa_percent",
-                 "active_percent","sed_counts","light_counts","life_counts",
-                 "mod_counts","vig_counts","lightlife_counts","mvpa_counts",
-                 "active_counts","sed_bouted_10min","sed_bouted_30min",
-                 "sed_bouted_60min","sed_breaks","max_1min_counts","max_5min_counts",
-                 "max_10min_counts","max_30min_counts","mvpa_bouted","vig_bouted",
-                 "guideline_min","cpm_hour1","cpm_hour2","cpm_hour3","cpm_hour4","cpm_hour5",
-                 "cpm_hour6","cpm_hour7","cpm_hour8","cpm_hour9","cpm_hour10","cpm_hour11",
-                 "cpm_hour12","cpm_hour13","cpm_hour14","cpm_hour15","cpm_hour16",
-                 "cpm_hour17","cpm_hour18","cpm_hour19","cpm_hour20","cpm_hour21",
-                 "cpm_hour22","cpm_hour23","cpm_hour24")
-    varnames = c(varnames,paste("wk_",varnames[7:69],sep=""),paste("we_",varnames[7:69],sep=""),"wtmec2yr_adj","wtmec4yr_adj")
+    varnames = c("seqn","nhanes_wave","valid_days","valid_week_days","valid_weekend_days","include","valid_min",
+                 "counts","cpm","steps","sed_min","light_min","life_min","mod_min","vig_min","lightlife_min",
+                 "mvpa_min","active_min","sed_percent","light_percent","life_percent","mod_percent","vig_percent",
+                 "lightlife_percent","mvpa_percent","active_percent","sed_counts","light_counts","life_counts",
+                 "mod_counts","vig_counts","lightlife_counts","mvpa_counts","active_counts","sed_bouted_10min",
+                 "sed_bouted_30min","sed_bouted_60min","sed_breaks","max_1min_counts","max_5min_counts",
+                 "max_10min_counts","max_30min_counts","num_mvpa_bouts","num_vig_bouts","mvpa_bouted","vig_bouted",
+                 "guideline_min","cpm_hour1","cpm_hour2","cpm_hour3","cpm_hour4","cpm_hour5","cpm_hour6","cpm_hour7",
+                 "cpm_hour8","cpm_hour9","cpm_hour10","cpm_hour11","cpm_hour12","cpm_hour13","cpm_hour14","cpm_hour15",
+                 "cpm_hour16","cpm_hour17","cpm_hour18","cpm_hour19","cpm_hour20","cpm_hour21","cpm_hour22","cpm_hour23",
+                 "cpm_hour24")
+    varnames = c(varnames,paste("wk_",varnames[7:71],sep=""),paste("we_",varnames[7:71],sep=""),"wtmec2yr_adj","wtmec4yr_adj")
     colnames(personaves) = varnames
     
     # Drop variables according to brevity and weekday.weekend settings
     if (brevity==1) {
-      if (weekday.weekend==TRUE) {personaves = personaves[,c(1:9,70:72,133:135,196:197)]}
-      else {personaves = personaves[,c(1:9,196:197)]}
+      if (weekday.weekend==TRUE) {
+        personaves = personaves[,c(1:10,72:75,137:140,202:203)]
+      } else {
+        personaves = personaves[,c(1:10,202:203)]
+      }
     } else if (brevity==2) {
-      if (weekday.weekend==TRUE) {personaves = personaves[,c(1:45,70:108,133:171,196:197)]}
-      else {personaves = personaves[,c(1:45,196:197)]}
+      if (weekday.weekend==TRUE) {
+        personaves = personaves[,c(1:47,72:112,137:177,202:203)]
+      } else {
+        personaves = personaves[,c(1:47,202:203)]
+      }
     } else if (brevity==3) {
-      if (weekday.weekend==FALSE) {personaves = personaves[,c(1:69,196:197)]}
+      if (weekday.weekend==FALSE) {
+        personaves = personaves[,c(1:71,202:203)]
+      }
     }
     
     # If cpm.nci is TRUE, re-calculate averages for cpm
