@@ -821,12 +821,13 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
     
     # Write per-day file if requested
     if (return.form %in% c(2,3)) {
-      dayfile = paste("accel_days_",curdate,".csv",sep="")
+      filestem = "accel_days_"
+      dayfile = paste(filestem,curdate,".csv",sep="")
       if (file.exists(dayfile)) {
         reps = 1
         repeat {
           reps = reps + 1
-          daytest = paste(dayfile,reps,sep="_")
+          daytest = paste(filestem,curdate,"_",reps,".csv",sep="")
           if (!file.exists(daytest)) {
             dayfile = daytest
             break
@@ -838,12 +839,13 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
     
     # Write per-person file if requested
     if (return.form %in% c(1,3)) {
-      personfile = paste("accel_aves_",curdate,".csv",sep="")
+      filestem = "accel_aves_"
+      personfile = paste(filestem,curdate,".csv",sep="")
       if (file.exists(personfile)) {
         reps = 1
         repeat {
           reps = reps + 1
-          persontest = paste(personfile,reps,sep="_")
+          persontest = paste(filestem,curdate,"_",reps,".csv",sep="")
           if (!file.exists(persontest)) {
             personfile = persontest
             break
@@ -868,12 +870,13 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
                  "artifact.action",artifact.action)
     settings = as.data.frame(settings)
     colnames(settings) = NULL
-    settingsfile = paste("settings_",curdate,".csv",sep="")
+    filestem = "settings_"
+    settingsfile = paste(filestem,curdate,".csv",sep="")
     if (file.exists(settingsfile)) {
       reps = 1
       repeat {
         reps = reps + 1
-        settingstest = paste(settingsfile,reps,sep="_")
+        settingstest = paste(filestem,curdate,"_",reps,".csv",sep="")
         if (!file.exists(settingstest)) {
           settingsfile = settingstest
           break
