@@ -10,7 +10,7 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
          artifact.thresh = 25000, artifact.action = 1, weekday.weekend = FALSE,
          return.form = 1, write.csv = TRUE) {
   
-  # If waves not set to 1, 2, or 3, stop function and output error message to user
+  # If waves not set to 1, 2, or 3, output error
   if (sum(waves==c(1,2,3))==0) {
     stop("For waves= option, please enter 1 for NHANES 2003-2004, 2 for NHANES 2005-2006, or 3 for both")
   }
