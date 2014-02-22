@@ -4,7 +4,7 @@
 Process NHANES 2003-2006 accelerometer data
 }
 \description{
-This function calculates a variety of physical activity variables from the time-series accelerometer data in NHANES 2003-2006. The function produces a summary .csv file, which by default is written to the user's working directory. A data dictionary for the variables generated is available on Dane's website, \url{https://sites.google.com/site/danevandomelen/}.
+This function calculates a variety of physical activity variables from the time-series accelerometer data in NHANES 2003-2006. The function produces a summary .csv file, which by default is written to the user's current working directory. A data dictionary for the variables generated is available on Dane's website, \url{https://sites.google.com/site/danevandomelen/}.
 }
 \usage{
 nhanes.accel.process(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
