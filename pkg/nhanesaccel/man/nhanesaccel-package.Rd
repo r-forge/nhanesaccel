@@ -16,7 +16,7 @@ Version: \tab 1.2\cr
 Date: \tab 2014-02-20\cr
 License: \tab GPL-2\cr
 }
-The following functions are included in nhanesaccel:
+The following functions are included in the package nhanesaccel:
 
 \code{\link{nhanes.accel.process}},
 \code{\link{nhanes.accel.reweight}}
