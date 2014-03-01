@@ -21,7 +21,7 @@ The following functions are included in nhanesaccel:
 \code{\link{nhanes.accel.process}},
 \code{\link{nhanes.accel.reweight}}
 
-Some additional information on the package nhanesaccel and its functions can be found on Dane's website, \url{https://sites.google.com/site/danevandomelen/}.
+Some additional information on the nhanesaccel and its functions can be found on Dane's website, \url{https://sites.google.com/site/danevandomelen/}.
 }
 \author{
 Dane R. Van Domelen, W. Stephen Pittard, and Tamara B. Harris
