@@ -146,53 +146,32 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
   int.cuts.original = int.cuts
   
   # Set variables to NULL to avoid notes from CRAN check
-  wave1_ages=wave1_demo=wave1_paxcal=wave1_paxday=wave1_paxinten=wave1_paxstat=wave1_seqn=NULL
-  wave2_ages=wave2_demo=wave2_paxcal=wave2_paxday=wave2_paxinten=wave2_paxstat=wave2_paxstep=wave2_seqn=NULL
+  w1=wave1_ages=wave1_demo=wave1_paxcal=wave1_paxday=wave1_paxinten=wave1_paxstat=wave1_seqn=NULL
+  w2=wave2_ages=wave2_demo=wave2_paxcal=wave2_paxday=wave2_paxinten=wave2_paxstat=wave2_paxstep=wave2_seqn=NULL
 
   # Compute daily physical activity variables for NHANES 2003-2004
   if (waves==1 | waves==3) {
 
     # Load in data for NHANES 2003-2004
     pb = tkProgressBar(title="Processing NHANES data",label="NHANES 03-04 raw data files loaded",
-                       min=0,max=5,initial=0,width=300)
-    data("wave1_seqn", envir=environment())
+                       min=0,max=2,initial=0,width=300)
+    data("w1", envir=environment())
     setTkProgressBar(pb,1)
-    data("wave1_paxstat", envir=environment())
-    setTkProgressBar(pb,2)
-    data("wave1_paxcal", envir=environment())
-    setTkProgressBar(pb,3)
-    data("wave1_paxday", envir=environment())
-    setTkProgressBar(pb,4)
     data("wave1_paxinten", envir=environment())
-    setTkProgressBar(pb,5)
+    setTkProgressBar(pb,2)
     close(pb)
     
-    # Finding start and end points of each ID
-    indices = seq(1,length(wave1_seqn),10080)
-    repeat {
-      a1 = 1:length(indices)
-      a2 = which(wave1_seqn[indices[a1]]!=wave1_seqn[indices[a1+1]-1])[1]
-      if (is.na(a2)) {break} else {
-        a3 = which(wave1_seqn[indices[a2]:(indices[a2]+10079)]!=wave1_seqn[indices[a2]])[1]
-        indices = c(indices[1:a2],(indices[a2]+a3-1),seq(indices[a2]+a3-1+10080,length(wave1_seqn),10080))
-      }
-    }
-    ids = wave1_seqn[indices]
-    mat1 = matrix(NA,nrow=length(ids),ncol=3)
-    mat1[,1] = wave1_seqn[indices]
-    mat1[,2] = indices
-    j = 1:(length(indices)-1)
-    mat1[j,3]=mat1[j+1,2]-1
-    mat1[max(j)+1,3]=length(wave1_seqn)
-    rm(j,indices)
+    # Start and end points of each ID
+    mat1 = w1[,1:3]
+    ids = mat1[,1]
     
-    # Drop vector that is no longer of use
-    rm(wave1_seqn)
+    # Create stat, cal, day, and age vectors
+    wave1_paxstat = w1[,4]
+    wave1_paxcal = w1[,5]
+    wave1_paxday = w1[,6]
+    wave1_ages = w1[,7]
     
-    # Load in vector of ages for sample
-    data("wave1_ages", envir=environment())
-    
-    # Initializing matrix to save daily physical activity variables
+    # Initialize matrix to save daily physical activity variables
     dayvars1 = matrix(NA,ncol=68,nrow=length(ids)*7)
     
     # k is the "day counter"
@@ -209,14 +188,13 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
       if (i%%50==0) {setTkProgressBar(pb,(i-1))}
       
       # Load in accelerometer data for participant i
-      week.paxday = wave1_paxday[mat1[i,2]:mat1[i,3]]
       week.paxinten = wave1_paxinten[mat1[i,2]:mat1[i,3]]
       
-      # Getting value for paxstat and paxcal
-      stat = wave1_paxstat[mat1[i,2]]
-      cal = wave1_paxcal[mat1[i,2]]
+      # Get value for paxstat and paxcal
+      stat = wave1_paxstat[i]
+      cal = wave1_paxcal[i]
       
-      # Getting number of data points for participant i
+      # Get number of data points for participant i
       weeklength = length(week.paxinten)
       
       # If participant has less than weartime.minimum minutes of data or status or calibration > 1, skip
@@ -308,6 +286,9 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
                                        skipchecks=TRUE)
       }
   
+      # Get day of week of first day
+      curday = wave1_paxday[i]
+      
       # Loop through days and generate physical activity variables
       for (j in 1:7) {
         
@@ -336,7 +317,11 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
         dayvars1[k,1] = ids[i]
         
         # Day of week
-        dayvars1[k,2] = week.paxday[1440*j-1439]
+        dayvars1[k,2] = curday
+        curday = curday + 1
+        if (curday==8) {
+          curday = 1
+        }
         
         # Check whether day is valid for analysis; if not, mark as invalid and skip rest of loop
         if (daywear<weartime.minimum | daywear>weartime.maximum | (artifact.action==1 & maxcount>=artifact.thresh) |
@@ -432,7 +417,7 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
     personaves1 = cbind(personaves1[,1],rep(1,nrow(personaves1)),personaves1[,2:201],personaves1[,201]/2)
   
     # Clear variables   
-    rm(wave1_paxstat,wave1_paxcal,wave1_paxday,wave1_paxinten,wave1_ages)
+    rm(w1,wave1_paxstat,wave1_paxcal,wave1_paxday,wave1_paxinten,wave1_ages)
     
   }
   
@@ -441,47 +426,26 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
 
     # Load in data for NHANES 2005-2006
     pb = tkProgressBar(title="Processing NHANES data",label="NHANES 05-06 raw data files loaded",
-                       min=0,max=6,initial=0,width=300)
-    data("wave2_seqn", envir=environment())
+                       min=0,max=3,initial=0,width=300)
+    data("w2", envir=environment())
     setTkProgressBar(pb,1)
-    data("wave2_paxstat", envir=environment())
-    setTkProgressBar(pb,2)
-    data("wave2_paxcal", envir=environment())
-    setTkProgressBar(pb,3)
-    data("wave2_paxday", envir=environment())
-    setTkProgressBar(pb,4)
     data("wave2_paxinten", envir=environment())
-    setTkProgressBar(pb,5)
+    setTkProgressBar(pb,2)
     data("wave2_paxstep", envir=environment())
-    setTkProgressBar(pb,6)
+    setTkProgressBar(pb,3)
     close(pb)
     
-    # Finding start and end points of each ID
-    indices = seq(1,length(wave2_seqn),10080)
-    repeat {
-      a1 = 1:length(indices)
-      a2 = which(wave2_seqn[indices[a1]]!=wave2_seqn[indices[a1+1]-1])[1]
-      if (is.na(a2)) {break} else {
-        a3 = which(wave2_seqn[indices[a2]:(indices[a2]+10079)]!=wave2_seqn[indices[a2]])[1]
-        indices = c(indices[1:a2],(indices[a2]+a3-1),seq(indices[a2]+a3-1+10080,length(wave2_seqn),10080))
-      }
-    }
-    ids = wave2_seqn[indices]
-    mat1 = matrix(NA,nrow=length(ids),ncol=3)
-    mat1[,1] = wave2_seqn[indices]
-    mat1[,2] = indices
-    j = 1:(length(indices)-1)
-    mat1[j,3]=mat1[j+1,2]-1
-    mat1[max(j)+1,3]=length(wave2_seqn)
-    rm(j,indices)
+    # Start and end points of each ID
+    mat1 = w2[,1:3]
+    ids = mat1[,1]
     
-    # Drop vector that is no longer of use
-    rm(wave2_seqn)
+    # Create stat, cal, day, and age vectors
+    wave2_paxstat = w2[,4]
+    wave2_paxcal = w2[,5]
+    wave2_paxday = w2[,6]
+    wave2_ages = w2[,7]
     
-    # Load in vector of ages for sample
-    data("wave2_ages", envir=environment())
-    
-    # Initializing matrix to save daily physical activity variables
+    # Initialize matrix to save daily physical activity variables
     dayvars2 = matrix(NA,ncol=68,nrow=length(ids)*7)
     
     # k is the "day counter"
@@ -498,15 +462,14 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
       if (i%%50==0) {setTkProgressBar(pb,(i-1))}
       
       # Load in accelerometer data for participant i
-      week.paxday = wave2_paxday[mat1[i,2]:mat1[i,3]]
       week.paxinten = wave2_paxinten[mat1[i,2]:mat1[i,3]]
       week.paxstep = wave2_paxstep[mat1[i,2]:mat1[i,3]]
       
-      # Getting value for paxstat and paxcal
-      stat = wave2_paxstat[mat1[i,2]]
-      cal = wave2_paxcal[mat1[i,2]]
+      # Get value for paxstat and paxcal
+      stat = wave2_paxstat[i]
+      cal = wave2_paxcal[i]
       
-      # Getting number of data points for participant i
+      # Get number of data points for participant i
       weeklength = length(week.paxinten)
       
       # If participant has less than weartime.minimum minutes of data or status or calibration > 1, skip
@@ -598,6 +561,9 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
                                        skipchecks=TRUE)
       }
       
+      # Get day of week of first day
+      curday = wave2_paxday[i]
+      
       # Loop through days and generate physical activity variables
       for (j in 1:7) {
         
@@ -627,7 +593,11 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
         dayvars2[k,1] = ids[i]
         
         # Day of week
-        dayvars2[k,2] = week.paxday[1440*j-1439]
+        dayvars2[k,2] = curday
+        curday = curday + 1
+        if (curday==8) {
+          curday = 1
+        }
         
         # Check whether day is valid for analysis; if not, mark as invalid and skip rest of loop
         if (daywear<weartime.minimum | daywear>weartime.maximum | (artifact.action==1 & maxcount>=artifact.thresh) |
@@ -726,7 +696,7 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
     personaves2 = cbind(personaves2[,1],rep(2,nrow(personaves2)),personaves2[,2:201],personaves2[,201]/2)
     
     # Clear variables
-    rm(wave2_paxstat,wave2_paxcal,wave2_paxday,wave2_paxinten,wave2_paxstep,wave2_ages)
+    rm(w2,wave2_paxstat,wave2_paxcal,wave2_paxday,wave2_paxinten,wave2_paxstep,wave2_ages)
 
   }
   
