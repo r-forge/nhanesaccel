@@ -232,7 +232,7 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
         next
       }
       
-      if (brevity==2 | brevity==3) {
+      if (brevity>1) {
         
         # Assign cut-points for MVPA and vigorous PA according to age
         int.cuts = int.cuts.original
@@ -298,7 +298,7 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
         # Loading data from weekly vectors into daily vectors
         day.paxinten = week.paxinten[(1440*j-1439):min(1440*j,weeklength)]
         day.wearflag = week.wearflag[(1440*j-1439):min(1440*j,weeklength)]
-        if (brevity==2 | brevity==3) {
+        if (brevity>1) {
           day.boutedMVPA = week.boutedMVPA[(1440*j-1439):min(1440*j,weeklength)]
           day.boutedvig = week.boutedvig[(1440*j-1439):min(1440*j,weeklength)]
           day.boutedsed10 = week.boutedsed10[(1440*j-1439):min(1440*j,weeklength)]
@@ -342,7 +342,7 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
         # Counts per minute - calculated as total counts during weartime divided by weartime
         dayvars1[k,6] = dayvars1[k,5]/dayvars1[k,4]
         
-        if (brevity==2 | brevity==3) {
+        if (brevity>1) {
           
           # Minutes in various intensity levels
           intensities = accel.intensities(counts=day.paxinten.valid,thresh=int.cuts)
@@ -425,15 +425,25 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
   if (waves==2 | waves==3) {
 
     # Load in data for NHANES 2005-2006
-    pb = tkProgressBar(title="Processing NHANES data",label="NHANES 05-06 raw data files loaded",
-                       min=0,max=3,initial=0,width=300)
-    data("w2", envir=environment())
-    setTkProgressBar(pb,1)
-    data("wave2_paxinten", envir=environment())
-    setTkProgressBar(pb,2)
-    data("wave2_paxstep", envir=environment())
-    setTkProgressBar(pb,3)
-    close(pb)
+    if (brevity==1) {
+      pb = tkProgressBar(title="Processing NHANES data",label="NHANES 05-06 raw data files loaded",
+                         min=0,max=2,initial=0,width=300)
+      data("w2", envir=environment())
+      setTkProgressBar(pb,1)
+      data("wave2_paxinten", envir=environment())
+      setTkProgressBar(pb,2)
+      close(pb)
+    } else {
+      pb = tkProgressBar(title="Processing NHANES data",label="NHANES 05-06 raw data files loaded",
+                         min=0,max=3,initial=0,width=300)
+      data("w2", envir=environment())
+      setTkProgressBar(pb,1)
+      data("wave2_paxinten", envir=environment())
+      setTkProgressBar(pb,2)
+      data("wave2_paxstep", envir=environment())
+      setTkProgressBar(pb,3)
+      close(pb)
+    }
     
     # Start and end points of each ID
     mat1 = w2[,1:3]
@@ -463,7 +473,9 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
       
       # Load in accelerometer data for participant i
       week.paxinten = wave2_paxinten[mat1[i,2]:mat1[i,3]]
-      week.paxstep = wave2_paxstep[mat1[i,2]:mat1[i,3]]
+      if (brevity>1) {
+        week.paxstep = wave2_paxstep[mat1[i,2]:mat1[i,3]]
+      }
       
       # Get value for paxstat and paxcal
       stat = wave2_paxstat[i]
@@ -507,7 +519,7 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
         next
       }
       
-      if (brevity==2 | brevity==3) {
+      if (brevity>1) {
         
         # Assign cut-points for MVPA and vigorous PA according to age
         int.cuts = int.cuts.original
@@ -572,9 +584,9 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
         
         # Loading data from weekly vectors into daily vectors
         day.paxinten = week.paxinten[(1440*j-1439):min(1440*j,weeklength)]
-        day.paxstep = week.paxstep[(1440*j-1439):min(1440*j,weeklength)]
         day.wearflag = week.wearflag[(1440*j-1439):min(1440*j,weeklength)]
-        if (brevity==2 | brevity==3) {
+        if (brevity>1) {
+          day.paxstep = week.paxstep[(1440*j-1439):min(1440*j,weeklength)]
           day.boutedMVPA = week.boutedMVPA[(1440*j-1439):min(1440*j,weeklength)]
           day.boutedvig = week.boutedvig[(1440*j-1439):min(1440*j,weeklength)]
           day.boutedsed10 = week.boutedsed10[(1440*j-1439):min(1440*j,weeklength)]
@@ -618,7 +630,7 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
         # Counts per minute - calculated as total counts during weartime divided by weartime
         dayvars2[k,6] = dayvars2[k,5]/dayvars2[k,4]
         
-        if (brevity==2 | brevity==3) {
+        if (brevity>1) {
         
           # Steps
           dayvars2[k,7] = sum(day.paxstep[day.wearflag==1])
@@ -716,7 +728,7 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
   if (return.form %in% c(2,3)) {
     
     # Add variable indicating which NHANES wave each participant is from
-    dayvars = cbind(dayvars[,1],rep(NA,nrow(dayvars)),dayvars[,2:68])
+    dayvars = cbind(dayvars[,1],rep(NA,nrow(dayvars)),dayvars[,2:ncol(dayvars)])
     dayvars[dayvars[,1]<=31125,2] = 1
     dayvars[dayvars[,1]>31125,2] = 2
     
@@ -733,9 +745,20 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
                           "cpm_hour12","cpm_hour13","cpm_hour14","cpm_hour15","cpm_hour16","cpm_hour17","cpm_hour18",
                           "cpm_hour19","cpm_hour20","cpm_hour21","cpm_hour22","cpm_hour23","cpm_hour24")
     
-    # Drop variables according to brevity setting
-    if (brevity==1) {dayvars = dayvars[,1:8]}
-    else if (brevity==2) {dayvars = dayvars[,1:45]}
+    # Drop variables according to waves and brevity settings
+    if (brevity==1) {
+      dayvars = dayvars[,1:7]
+    } else if (brevity==2) {
+      if (waves==1) {
+        dayvars = dayvars[,c(1:7,9:45)]
+      } else {
+        dayvars = dayvars[,1:45]
+      }
+    } else if (brevity==3) {
+      if (waves==1) {
+        dayvars = dayvars[,c(1:7,9:ncol(dayvars))]
+      }
+    }
     
   }
   
@@ -754,25 +777,43 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
                  "cpm_hour8","cpm_hour9","cpm_hour10","cpm_hour11","cpm_hour12","cpm_hour13","cpm_hour14","cpm_hour15",
                  "cpm_hour16","cpm_hour17","cpm_hour18","cpm_hour19","cpm_hour20","cpm_hour21","cpm_hour22","cpm_hour23",
                  "cpm_hour24")
-    varnames = c(varnames,paste("wk_",varnames[7:71],sep=""),paste("we_",varnames[7:71],sep=""),"wtmec2yr_adj","wtmec4yr_adj")
+    varnames = c(varnames,paste("wk_",varnames[7:length(varnames)],sep=""),paste("we_",varnames[7:length(varnames)],sep=""),"wtmec2yr_adj","wtmec4yr_adj")
     colnames(personaves) = varnames
     
     # Drop variables according to brevity and weekday.weekend settings
     if (brevity==1) {
       if (weekday.weekend==TRUE) {
-        personaves = personaves[,c(1:10,72:75,137:140,202:203)]
+        personaves = personaves[,c(1:9,72:74,137:139,202:203)]
       } else {
-        personaves = personaves[,c(1:10,202:203)]
+        personaves = personaves[,c(1:9,202:203)]
       }
+      
     } else if (brevity==2) {
-      if (weekday.weekend==TRUE) {
-        personaves = personaves[,c(1:47,72:112,137:177,202:203)]
+      if (waves==1) {
+        if (weekday.weekend==TRUE) {
+          personaves = personaves[,c(1:9,11:47,72:74,76:112,137:139,141:177,202:203)]
+        } else {
+          personaves = personaves[,c(1:9,11:47,202:203)]
+        }
       } else {
-        personaves = personaves[,c(1:47,202:203)]
+        if (weekday.weekend==TRUE) {
+          personaves = personaves[,c(1:47,72:112,137:177,202:203)]
+        } else {
+          personaves = personaves[,c(1:47,202:203)]
+        }
       }
+      
     } else if (brevity==3) {
-      if (weekday.weekend==FALSE) {
-        personaves = personaves[,c(1:71,202:203)]
+      if (waves==1) {
+        if (weekday.weekend==TRUE) {
+          personaves = personaves[,c(1:9,11:74,76:139,141:203)]
+        } else {
+          personaves = personaves[,c(1:9,11:71,202:203)]
+        }
+      } else {
+        if (weekday.weekend==FALSE) {
+          personaves = personaves[,c(1:71,202:203)]
+        }
       }
     }
     
