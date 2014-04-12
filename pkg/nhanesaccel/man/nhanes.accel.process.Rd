@@ -9,9 +9,9 @@ This function calculates a variety of physical activity variables from the time-
 \usage{
 nhanes.accel.process(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
                      valid.week.days = 0, valid.weekend.days = 0, 
-                     int.cuts = c(100,760,2020,5999), 
-                     youth.mod.cuts = rep(int.cuts[3],12), 
-                     youth.vig.cuts = rep(int.cuts[4],12), cpm.nci = FALSE, 
+                     int.cuts = c(100, 760, 2020, 5999), 
+                     youth.mod.cuts = rep(int.cuts[3], 12), 
+                     youth.vig.cuts = rep(int.cuts[4], 12), cpm.nci = FALSE, 
                      days.distinct = FALSE, nonwear.window = 60, nonwear.tol = 0,
                      nonwear.tol.upper = 99, nonwear.nci = FALSE, weartime.minimum = 600,
                      weartime.maximum = 1200, use.partialdays = FALSE, 
