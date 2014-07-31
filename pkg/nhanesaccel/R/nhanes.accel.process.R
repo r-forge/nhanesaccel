@@ -1,12 +1,12 @@
 nhanes.accel.process <-
-function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1, 
-         valid.week.days = 0, valid.weekend.days = 0, 
+function(waves = 3, directory = getwd(), nci.methods = FALSE, brevity = 1, 
+         valid.days = 1, valid.week.days = 0, valid.weekend.days = 0, 
          int.cuts = c(100, 760, 2020, 5999),
          youth.mod.cuts = rep(int.cuts[3], 12), 
          youth.vig.cuts = rep(int.cuts[4], 12), cpm.nci = FALSE, 
          days.distinct = FALSE, nonwear.window = 60, nonwear.tol = 0,
          nonwear.tol.upper = 99, nonwear.nci = FALSE, weartime.minimum = 600, 
-         weartime.maximum = 1200, use.partialdays = FALSE, 
+         weartime.maximum = 1200, partialday.minimum = 1440, 
          active.bout.length = 10, active.bout.tol = 0, 
          mvpa.bout.tol.lower = 0, vig.bout.tol.lower = 0, 
          active.bout.nci = FALSE, sed.bout.tol = 0, 
@@ -17,6 +17,11 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
   # If waves not set to 1, 2, or 3, output error
   if (sum(waves == c(1, 2, 3)) == 0) {
     stop("For waves option, please enter 1 for NHANES 2003-2004, 2 for NHANES 2005-2006, or 3 for both")
+  }
+  
+  # If nci.methods is not a logical, output error
+  if (!is.logical(nci.methods)) {
+    stop("For nci.methods input, please enter TRUE or FALSE")
   }
   
   # If brevity out of range, output error
@@ -81,9 +86,9 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
     stop("For weartime.maximum option, please enter positive value greater than weartime.minimum")
   }
   
-  # If use.partialdays is not a logical, output error
-  if (!is.logical(use.partialdays)) {
-    stop("For use.partialdays option, please enter TRUE or FALSE")
+  # If partialday.minimum is not in range, output error
+  if (!is.numeric(partialday.minimum) || partialday.minimum < 1 || partialday.minimum > 1440)  {
+    stop("For partialday.minimum input, please enter positive whole number less than or equal to 1440")
   }
   
   # If active.bout.length out of range, output error
@@ -146,24 +151,55 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
     stop("For write.csv option, please enter TRUE or FALSE")
   }
   
+  # If nci.methods is TRUE, set inputs to replicate data processing done by NCI's SAS programs
+  if (nci.methods == TRUE) {
+    
+    # Count cut-points for youth
+    youthmod <- c(1400,1515,1638,1770,1910,2059,2220,2393,2580,2781,3000,3239)
+    youthvig <- c(3758,3947,4147,4360,4588,4832,5094,5375,5679,6007,6363,6751)
+    
+    # Set certain inputs to match NCI methods
+    valid.days <- 4
+    valid.week.days <- 0
+    valid.weekend.days <- 0
+    int.cuts <- c(100, 760, 2020, 5999)
+    youth.mod.cuts <- youthmod
+    youth.vig.cuts <- youthvig
+    cpm.nci <- TRUE
+    days.distinct <- TRUE
+    nonwear.window <- 60
+    nonwear.tol <- 2
+    nonwear.tol.upper <- 100
+    nonwear.nci <- TRUE
+    weartime.minimum <- 600
+    weartime.maximum <- 1440
+    partialday.minimum <- 1440
+    active.bout.length <- 10
+    active.bout.tol <- 2
+    mvpa.bout.tol.lower <- 0
+    vig.bout.tol.lower <- 0
+    active.bout.nci <- TRUE
+    sed.bout.tol <- 0
+    sed.bout.tol.maximum <- 759
+    artifact.thresh <- 32767
+    artifact.action <- 3
+    
+  }
+  
   # Save user-defined int.cuts in variable int.cuts.original
   int.cuts.original <- int.cuts
   
   # Set variables to NULL to avoid notes from CRAN check
   w1 <- wave1_ages <- wave1_demo <- wave1_paxcal <- wave1_paxday <- wave1_paxinten <- wave1_paxstat <- wave1_seqn <- NULL
   w2 <- wave2_ages <- wave2_demo <- wave2_paxcal <- wave2_paxday <- wave2_paxinten <- wave2_paxstat <- wave2_paxstep <- wave2_seqn <- NULL
-
+  
   # Compute daily physical activity variables for NHANES 2003-2004
   if (waves == 1 | waves == 3) {
 
     # Load in data for NHANES 2003-2004
-    pb <- tkProgressBar(title = "Processing NHANES data", label="NHANES 03-04 raw data files loaded",
-                       min = 0, max = 2, initial = 0, width = 300)
+    cat("Loading NHANES 2003-2004 data files... \n")
     data("w1", envir = environment())
-    setTkProgressBar(pb, 1)
     data("wave1_paxinten", envir = environment())
-    setTkProgressBar(pb, 2)
-    close(pb)
     
     # Start and end points of each ID
     mat1 <- w1[,1:3]
@@ -181,15 +217,11 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
     # k is the "day counter"
     k <- 0
     
-    # Initializing status bar
-    pb <- tkProgressBar(title = "Processing NHANES data", label = "NHANES 03-04 observations processed",
-                       min = 0, max = length(ids), initial = 0, width = 300)
+    # Update status
+    cat("Processing NHANES 2003-2004 data...\n")
     
     # Looping through accelerometer data for i participants
     for (i in 1:length(ids)) { 
-      
-      # Update status bar after every 50th participant's data is processed
-      if (i%%50 == 0) {setTkProgressBar(pb,(i-1))}
       
       # Load in accelerometer data for participant i
       week.paxinten <- wave1_paxinten[mat1[i,2]:mat1[i,3]]
@@ -331,7 +363,7 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
         
         # Check whether day is valid for analysis; if not, mark as invalid and skip rest of loop
         if (daywear < weartime.minimum | daywear > weartime.maximum | (artifact.action == 1 & maxcount >= artifact.thresh) |
-              (use.partialdays == FALSE & daylength < 1440)) {
+              daylength < partialday.minimum) {
           dayvars1[k,3] <- 0
           if (weeklength <= j*1440) {
             break
@@ -416,7 +448,7 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
     }
     
     # Close status bar
-    close(pb)
+    #close(pb)
     
     # Delete empty rows in dayvars1
     dayvars1 <- dayvars1[1:k,]
@@ -439,24 +471,14 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
   if (waves == 2 | waves == 3) {
 
     # Load in data for NHANES 2005-2006
+    cat("Loading NHANES 2005-2006 data files...\n")
     if (brevity == 1) {
-      pb <- tkProgressBar(title = "Processing NHANES data", label = "NHANES 05-06 raw data files loaded",
-                          min = 0, max = 2, initial = 0, width = 300)
       data("w2", envir = environment())
-      setTkProgressBar(pb, 1)
       data("wave2_paxinten", envir = environment())
-      setTkProgressBar(pb, 2)
-      close(pb)
     } else {
-      pb <- tkProgressBar(title = "Processing NHANES data", label = "NHANES 05-06 raw data files loaded",
-                          min = 0, max = 3, initial = 0, width = 300)
       data("w2", envir=environment())
-      setTkProgressBar(pb, 1)
       data("wave2_paxinten", envir = environment())
-      setTkProgressBar(pb, 2)
       data("wave2_paxstep", envir = environment())
-      setTkProgressBar(pb, 3)
-      close(pb)
     }
     
     # Start and end points of each ID
@@ -475,17 +497,11 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
     # k is the "day counter"
     k <- 0
     
-    # Initializing status bar
-    pb <- tkProgressBar(title = "Processing NHANES data", label = "NHANES 05-06 observations processed",
-                        min = 0, max = length(ids), initial = 0, width = 300)
+    # Update status
+    cat("Processing NHANES 2005-2006 data... \n")
     
     # Looping through accelerometer data for i participants
     for (i in 1:length(ids)) { 
-      
-      # Update status bar after every 50th participant's data is processed
-      if (i%%50 == 0) {
-        setTkProgressBar(pb, (i-1))
-      }
       
       # Load in accelerometer data for participant i
       week.paxinten <- wave2_paxinten[mat1[i,2]:mat1[i,3]]
@@ -631,7 +647,7 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
         
         # Check whether day is valid for analysis; if not, mark as invalid and skip rest of loop
         if (daywear < weartime.minimum | daywear > weartime.maximum | (artifact.action == 1 & maxcount >= artifact.thresh) |
-              (use.partialdays == FALSE & daylength < 1440)) {
+              daylength < partialday.minimum) {
           dayvars2[k,3] <- 0
           if (weeklength <= j*1440) {
             break
@@ -719,7 +735,7 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
     }
     
     # Close status bar
-    close(pb)
+    #close(pb)
     
     # Delete empty rows in dayvars2
     dayvars2 <- dayvars2[1:k,]
@@ -850,6 +866,9 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
     
   }
   
+  # Tell user that data processing is complete
+  cat("Done.\n")
+  
   # Write .csv file(s) according to write.csv and return.form
   if (write.csv == TRUE) {
     
@@ -899,7 +918,7 @@ function(waves = 3, directory = getwd(), brevity = 1, valid.days = 1,
                  "cpm.nci", cpm.nci, "days.distinct", days.distinct, "nonwear.window", nonwear.window, 
                  "nonwear.tol", nonwear.tol, "nonwear.tol.upper", nonwear.tol.upper, 
                  "nonwear.nci", nonwear.nci, "weartime.minimum", weartime.minimum, 
-                 "weartime.maximum", weartime.maximum, "use.partialdays", use.partialdays, 
+                 "weartime.maximum", weartime.maximum, "partialday.minimum", partialday.minimum, 
                  "active.bout.length", active.bout.length, "active.bout.tol", active.bout.tol, 
                  "mvpa.bout.tol.lower", mvpa.bout.tol.lower, "vig.bout.tol.lower", vig.bout.tol.lower, 
                  "active.bout.nci", active.bout.nci, "sed.bout.tol", sed.bout.tol, 
