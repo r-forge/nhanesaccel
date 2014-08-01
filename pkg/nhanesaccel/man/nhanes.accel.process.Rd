@@ -18,7 +18,7 @@ nhanes.accel.process(waves = 3, directory = getwd(), nci.methods = FALSE, brevit
                      active.bout.length = 10, active.bout.tol = 0, 
                      mvpa.bout.tol.lower = 0, vig.bout.tol.lower = 0, 
                      active.bout.nci = FALSE, sed.bout.tol = 0, 
-                     sed.bout.tol.maximum = int.cuts[2]-1, artifact.thresh = 25000, 
+                     sed.bout.tol.maximum = int.cuts[2] - 1, artifact.thresh = 25000, 
                      artifact.action = 1, weekday.weekend = FALSE, return.form = 1, 
                      write.csv = FALSE)
 }
@@ -183,7 +183,7 @@ acceldata3 <- nhanes.accel.process(waves = 3, brevity = 2, valid.days = 4,
 acceldata4 <- nhanes.accel.process(waves = 3, brevity = 2, nci.methods = TRUE)
 
 # They give equivalent results
-all(acceldata3 == acceldata4)
+all(acceldata3 == acceldata4, na.rm = TRUE)
 
 # The variables in acceldata3 and acceldata4 correspond to the variables created by 
 # the NCI's SAS programs as follows: valid_days/valdays, include/valid_person, 

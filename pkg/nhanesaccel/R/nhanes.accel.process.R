@@ -10,9 +10,9 @@ function(waves = 3, directory = getwd(), nci.methods = FALSE, brevity = 1,
          active.bout.length = 10, active.bout.tol = 0, 
          mvpa.bout.tol.lower = 0, vig.bout.tol.lower = 0, 
          active.bout.nci = FALSE, sed.bout.tol = 0, 
-         sed.bout.tol.maximum = int.cuts[2]-1, artifact.thresh = 25000, 
+         sed.bout.tol.maximum = int.cuts[2] - 1, artifact.thresh = 25000, 
          artifact.action = 1, weekday.weekend = FALSE, return.form = 1, 
-         write.csv = TRUE) {
+         write.csv = FALSE) {
   
   # If waves not set to 1, 2, or 3, output error
   if (sum(waves == c(1, 2, 3)) == 0) {
