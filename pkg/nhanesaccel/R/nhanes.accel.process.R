@@ -155,8 +155,8 @@ function(waves = 3, directory = getwd(), nci.methods = FALSE, brevity = 1,
   if (nci.methods == TRUE) {
     
     # Count cut-points for youth
-    youthmod <- c(1400,1515,1638,1770,1910,2059,2220,2393,2580,2781,3000,3239)
-    youthvig <- c(3758,3947,4147,4360,4588,4832,5094,5375,5679,6007,6363,6751)
+    youthmod <- c(1400, 1515, 1638, 1770, 1910, 2059, 2220, 2393, 2580, 2781, 3000, 3239)
+    youthvig <- c(3758, 3947, 4147, 4360, 4588, 4832, 5094, 5375, 5679, 6007, 6363, 6751)
     
     # Set certain inputs to match NCI methods
     valid.days <- 4
@@ -196,10 +196,14 @@ function(waves = 3, directory = getwd(), nci.methods = FALSE, brevity = 1,
   # Compute daily physical activity variables for NHANES 2003-2004
   if (waves == 1 | waves == 3) {
 
-    # Load in data for NHANES 2003-2004
-    cat("Loading NHANES 2003-2004 data files... \n")
+    # Load in data for NHANES 2003-2004 and show progress bar
+    cat("Loading NHANES 2003-2004 data... \n")
+    progress(0, 2, progress.bar = TRUE)
     data("w1", envir = environment())
+    progress(1, 2, progress.bar = TRUE)
     data("wave1_paxinten", envir = environment())
+    progress(2, 2, progress.bar = TRUE)
+    progress(3, 2, progress.bar = TRUE)
     
     # Start and end points of each ID
     mat1 <- w1[,1:3]
@@ -217,11 +221,19 @@ function(waves = 3, directory = getwd(), nci.methods = FALSE, brevity = 1,
     # k is the "day counter"
     k <- 0
     
-    # Update status
-    cat("Processing NHANES 2003-2004 data...\n")
+    # Initialize progress bar for data processing
+    cat("\nProcessing NHANES 2003-2004 data...\n")
+    statusvals <- c(seq(1, 7176, 72), 7176)
+    statuscounter <- 0
     
     # Looping through accelerometer data for i participants
     for (i in 1:length(ids)) { 
+      
+      # Update progrss bar
+      if (i %in% statusvals) {
+        statuscounter <- statuscounter + 1
+        progress(statuscounter, progress.bar = TRUE)
+      }
       
       # Load in accelerometer data for participant i
       week.paxinten <- wave1_paxinten[mat1[i,2]:mat1[i,3]]
@@ -447,9 +459,6 @@ function(waves = 3, directory = getwd(), nci.methods = FALSE, brevity = 1,
       
     }
     
-    # Close status bar
-    #close(pb)
-    
     # Delete empty rows in dayvars1
     dayvars1 <- dayvars1[1:k,]
 
@@ -470,15 +479,24 @@ function(waves = 3, directory = getwd(), nci.methods = FALSE, brevity = 1,
   # Compute daily physical activity variables for NHANES 2003-2004
   if (waves == 2 | waves == 3) {
 
-    # Load in data for NHANES 2005-2006
-    cat("Loading NHANES 2005-2006 data files...\n")
+    # Load in data for NHANES 2005-2006 and show progress bar
+    cat("\nLoading NHANES 2005-2006 data...\n")
     if (brevity == 1) {
+      progress(0, 2, progress.bar = TRUE)
       data("w2", envir = environment())
+      progress(1, 2, progress.bar = TRUE)
       data("wave2_paxinten", envir = environment())
+      progress(2, 2, progress.bar = TRUE)
+      progress(3, 2, progress.bar = TRUE)
     } else {
+      progress(0, 3, progress.bar = TRUE)
       data("w2", envir=environment())
+      progress(1, 3, progress.bar = TRUE)
       data("wave2_paxinten", envir = environment())
+      progress(2, 3, progress.bar = TRUE)
       data("wave2_paxstep", envir = environment())
+      progress(3, 3, progress.bar = TRUE)
+      progress(4, 3, progress.bar = TRUE)
     }
     
     # Start and end points of each ID
@@ -497,11 +515,19 @@ function(waves = 3, directory = getwd(), nci.methods = FALSE, brevity = 1,
     # k is the "day counter"
     k <- 0
     
-    # Update status
-    cat("Processing NHANES 2005-2006 data... \n")
+    # Initialize progress bar for data processing
+    cat("\nProcessing NHANES 2005-2006 data...\n")
+    statusvals <- c(seq(1, 7455, 75), 7455)
+    statuscounter <- 0
     
     # Looping through accelerometer data for i participants
     for (i in 1:length(ids)) { 
+      
+      # Update progrss bar
+      if (i %in% statusvals) {
+        statuscounter <- statuscounter + 1
+        progress(statuscounter, progress.bar = TRUE)
+      }
       
       # Load in accelerometer data for participant i
       week.paxinten <- wave2_paxinten[mat1[i,2]:mat1[i,3]]
@@ -867,7 +893,7 @@ function(waves = 3, directory = getwd(), nci.methods = FALSE, brevity = 1,
   }
   
   # Tell user that data processing is complete
-  cat("Done.\n")
+  cat("\nDone.\n")
   
   # Write .csv file(s) according to write.csv and return.form
   if (write.csv == TRUE) {
@@ -942,7 +968,7 @@ function(waves = 3, directory = getwd(), nci.methods = FALSE, brevity = 1,
     write.csv(x = settings, file = settingsfile, quote = FALSE, row.names = FALSE)
   
     # Print message to user
-    print(paste("Please see", directory, "for .csv file(s) with NHANES physical activity variables."))
+    cat(paste("\nPlease see", directory, "for .csv file(s) with NHANES physical activity variables.\n"))
   }
   
   # Return data frame(s)
