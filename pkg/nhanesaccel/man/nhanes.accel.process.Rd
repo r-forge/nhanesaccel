@@ -121,39 +121,9 @@ If TRUE, function writes .csv file(s) to user-specified directory (by default, t
 The algorithm used to identify non-wear time is defined by function inputs nonwear.window, nonwear.tol, nonwear.tol.upper, and nonwear.nci. If nonwear.nci is set to FALSE, a `regular' non-wear algorithm is used. This algorithm classifies as non-wear time any interval of length nonwear.window in which no more than nonwear.tol counts are non-zero, and those counts are all less than nonwear.tol.upper. If nonwear.nci is set to TRUE, the non-wear algorithm from the NCI's SAS programs [2] is used. This algorithm classifies as non-wear time any interval of length nonwear.window that starts with a count value of 0, does not contain any periods with (nonwear.tol + 1) consecutive non-zero count values, and does not contain any counts greater than nonwear.tol.upper. Once a non-wear bout is established, it continues until there are (nonwear.tol + 1) consecutive non-zero count values or a single count value greater than nonwear.tol.upper. 
 
 The activity bout algorithm operates similarly to the non-wear algorithm. If active.bout.nci is set to FALSE, a `regular' algorithm is used. To illustrate, any interval of length active.bout.length where no more than active.bout.tol minutes have counts less than int.cuts[3], and the counts below int.cuts[3] are all mvpa.bout.tol.lower or greater, is considered an MVPA bout. If active.bout.nci is set to TRUE, the NCI's algorithm is used. This algorithm defines an MVPA bout as an interval that starts with ten consecutive count values greater than or equal to int.cuts[3], allowing for up to active.bout.tol minutes with counts below int.cuts[3]. The first minute of the bout cannot be below int.cuts[3]. Once the MVPA bout is established, it continues until there are (active.bout.tol + 1) consecutive minutes with counts less than int.cuts[3]. The parameters mvpa.bout.tol.lower and vig.bout.tol.lower are not used in the NCI bout algorithm.
-}
-\value{
-A single matrix or a list of two matrices, depending on return.form. If write.csv is set to TRUE, the function also writes one or two .csv files to user-specified directory.
-}
-\references{
-1. Centers for Disease Control and Prevention (CDC). National Center for Health Statistics (NCHS). National Health and Nutrition Examination Survey Data. Hyattsville, MD: US Department of Health and Human Services, Centers for Disease Control and Prevention, 2003-6 \url{http://www.cdc.gov/nchs/nhanes/nhanes_questionnaires.htm}. Accessed July 31, 2014.
 
-2. National Cancer Institute. Risk factor monitoring and methods: SAS programs for analyzing NHANES 2003-2004 accelerometer data. Available at: \url{http://riskfactor.cancer.gov/tools/nhanes_pam}. Accessed July 31, 2014.
+Here are some examples for how to use the function.
 
-Acknowledgment: This material is based upon work supported by the National Science Foundation Graduate Research Fellowship under Grant No. DGE-0940903.
-}
-\author{
-Dane R. Van Domelen, W. Stephen Pittard, and Tamara B. Harris.
-}
-\note{
-Leaving days.distinct set to FALSE is strongly encouraged. If set to TRUE, activity bouts and non-wear periods that span the end of one day and the beginning of the next may be missed. This option is included because it is necessary to reproduce the algorithm used in the NCI's SAS programs [2].
-
-The default for weartime.maximum is 1200. Daily wear time greater than 1200 minutes corresponds to less than 4 hours of sleep. In such cases, it seems more likely that the participant slept while wearing the device, and as a result had small movements overnight show up as wear time. However, wear time maximums are not uncommon. Users who wish to use more traditional data processing methodology can set weartime.maximum to 1440. Also, if participants in the study were not instructed to remove the accelerometer during sleeping, weartime.maximum should be set to 1440.
-
-For partialday.minimum, one might prefer to include days of monitoring that do not have a full 1440 minutes of data, as long as the wear time criteria are met. We recommend requiring the full 1440 minutes, because a day of monitoring with a big chunk of missing data is probably not representative of a typical day of physical activity. Also, it seems likely that missing segments of data might tend to occur at a particular time of day (e.g. evening), and physical activity is strongly associated with time of day. Therefore, including such days could introduce bias.
-
-There is no perfect solution for dealing with abnormally high count values, also known as artifacts. The NCI's SAS programs replace artifacts (which they define as the ActiGraph AM-7164 maximum, 32767) with the mean of neighboring count values [2]. This can be done by specifying artifact.thresh = 32767 and artifact.action = 3. This method may work well, but in many cases count values that are artifacts are surrounded by count values that are only slightly lower, bringing into question whether the entire group of counts is plausible or implausible. Count values at or around the cut-point defined by artifact.thresh can contribute greatly to daily counts. Therefore the default settings, artifact.thresh = 25000 and artifact.action = 1, simply excludes days of monitoring with one or more count values of 25000 or greater. As this solution is clearly not ideal, users are welcome to choose their own preferred setting for artifact.thresh and artifact.action.
-
-If the user allows for a tolerance in bout detection (e.g. active.bout.tol = 2) and does not use the NCI algorithm (active.bout.nci = FALSE), specifying non-zero values for mvpa.bout.tol.lower and vig.bout.tol.lower is highly recommended. Otherwise the algorithm will tend to classify minutes immediately before and after an activity bout as being part of the bout.
-
-NHANES uses a complex, multi-stage, probability sampling design, and all statistical analysis should account for its design features. The dataset produced by nhanes.accel.process includes the variables wtmec2yr_adj and wtmec4yr_adj. If only data from one wave of NHANES is used (i.e. 2003-2004 OR 2005-2006), the appropriate weight variable is wtmec2yr_adj. If data from both NHANES 2003-2004 and NHANES 2005-2006 is used, the appropriate weight variable is wtmec4yr_adj. Note that analyses must also include the variables strata and primary sampling unit (PSU), which are in the NHANES Demographics files along with other important variables like gender, age, race/ethnicity, etc.
-
-Some additional information on the package nhanesaccel and its functions can be found on Dane's website, \url{https://sites.google.com/site/danevandomelen/}.
-}
-\seealso{
-\code{\link{nhanes.accel.reweight}}, \code{\link{accel.artifacts}}, \code{\link{accel.bouts}}, \code{\link{accel.intensities}}, \code{\link{accel.sedbreaks}}, \code{\link{accel.weartime}}, \code{\link{movingaves}}, \code{\link{blockaves}}
-}
-\examples{
 # Process NHANES 2003-2006 data using default settings
 acceldata1 <- nhanes.accel.process()
 
@@ -192,6 +162,40 @@ all(acceldata3 == acceldata4, na.rm = TRUE)
 # program. The only difference is that the SAS programs include data on nine more 
 # participants who had potentially unreliable data. Excluding these participants is 
 # considered acceptable by the NCI [2].
+}
+\value{
+A single matrix or a list of two matrices, depending on return.form. If write.csv is set to TRUE, the function also writes one or two .csv files to user-specified directory.
+}
+\references{
+1. Centers for Disease Control and Prevention (CDC). National Center for Health Statistics (NCHS). National Health and Nutrition Examination Survey Data. Hyattsville, MD: US Department of Health and Human Services, Centers for Disease Control and Prevention, 2003-6 \url{http://www.cdc.gov/nchs/nhanes/nhanes_questionnaires.htm}. Accessed July 31, 2014.
+
+2. National Cancer Institute. Risk factor monitoring and methods: SAS programs for analyzing NHANES 2003-2004 accelerometer data. Available at: \url{http://riskfactor.cancer.gov/tools/nhanes_pam}. Accessed July 31, 2014.
+
+Acknowledgment: This material is based upon work supported by the National Science Foundation Graduate Research Fellowship under Grant No. DGE-0940903.
+}
+\author{
+Dane R. Van Domelen, W. Stephen Pittard, and Tamara B. Harris.
+}
+\note{
+Leaving days.distinct set to FALSE is strongly encouraged. If set to TRUE, activity bouts and non-wear periods that span the end of one day and the beginning of the next may be missed. This option is included because it is necessary to reproduce the algorithm used in the NCI's SAS programs [2].
+
+The default for weartime.maximum is 1200. Daily wear time greater than 1200 minutes corresponds to less than 4 hours of sleep. In such cases, it seems more likely that the participant slept while wearing the device, and as a result had small movements overnight show up as wear time. However, wear time maximums are not uncommon. Users who wish to use more traditional data processing methodology can set weartime.maximum to 1440. Also, if participants in the study were not instructed to remove the accelerometer during sleeping, weartime.maximum should be set to 1440.
+
+For partialday.minimum, one might prefer to include days of monitoring that do not have a full 1440 minutes of data, as long as the wear time criteria are met. We recommend requiring the full 1440 minutes, because a day of monitoring with a big chunk of missing data is probably not representative of a typical day of physical activity. Also, it seems likely that missing segments of data might tend to occur at a particular time of day (e.g. evening), and physical activity is strongly associated with time of day. Therefore, including such days could introduce bias.
+
+There is no perfect solution for dealing with abnormally high count values, also known as artifacts. The NCI's SAS programs replace artifacts (which they define as the ActiGraph AM-7164 maximum, 32767) with the mean of neighboring count values [2]. This can be done by specifying artifact.thresh = 32767 and artifact.action = 3. This method may work well, but in many cases count values that are artifacts are surrounded by count values that are only slightly lower, bringing into question whether the entire group of counts is plausible or implausible. Count values at or around the cut-point defined by artifact.thresh can contribute greatly to daily counts. Therefore the default settings, artifact.thresh = 25000 and artifact.action = 1, simply excludes days of monitoring with one or more count values of 25000 or greater. As this solution is clearly not ideal, users are welcome to choose their own preferred setting for artifact.thresh and artifact.action.
+
+If the user allows for a tolerance in bout detection (e.g. active.bout.tol = 2) and does not use the NCI algorithm (active.bout.nci = FALSE), specifying non-zero values for mvpa.bout.tol.lower and vig.bout.tol.lower is highly recommended. Otherwise the algorithm will tend to classify minutes immediately before and after an activity bout as being part of the bout.
+
+NHANES uses a complex, multi-stage, probability sampling design, and all statistical analysis should account for its design features. The dataset produced by nhanes.accel.process includes the variables wtmec2yr_adj and wtmec4yr_adj. If only data from one wave of NHANES is used (i.e. 2003-2004 OR 2005-2006), the appropriate weight variable is wtmec2yr_adj. If data from both NHANES 2003-2004 and NHANES 2005-2006 is used, the appropriate weight variable is wtmec4yr_adj. Note that analyses must also include the variables strata and primary sampling unit (PSU), which are in the NHANES Demographics files along with other important variables like gender, age, race/ethnicity, etc.
+
+Some additional information on the package nhanesaccel and its functions can be found on Dane's website, \url{https://sites.google.com/site/danevandomelen/}.
+}
+\seealso{
+\code{\link{nhanes.accel.reweight}}, \code{\link{accel.artifacts}}, \code{\link{accel.bouts}}, \code{\link{accel.intensities}}, \code{\link{accel.sedbreaks}}, \code{\link{accel.weartime}}, \code{\link{movingaves}}, \code{\link{blockaves}}
+}
+\examples{
+NA
 }
 \keyword{ NHANES }
 \keyword{ accelerometry }
