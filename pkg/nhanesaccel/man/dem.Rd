@@ -62,10 +62,10 @@ Includes 45 demographic variables.
 The variable descriptions above are taken directly from the NHANES website [1].
 }
 \source{
-National Health and Nutrition Examination Survey 2003-2006 (see reference).
+National Health and Nutrition Examination Survey 2003-2006 [1].
 }
 \references{
-1. Centers for Disease Control and Prevention (CDC). National Center for Health Statistics (NCHS). National Health and Nutrition Examination Survey Data. Hyattsville, MD: US Department of Health and Human Services, Centers for Disease Control and Prevention, 2003-6 \url{http://wwwn.cdc.gov/nchs/nhanes/search/datapage.aspx?Component=Demographics&CycleBeginYear=2003}. Accessed February 1, 2014.
+1. Centers for Disease Control and Prevention (CDC). National Center for Health Statistics (NCHS). National Health and Nutrition Examination Survey Data. Hyattsville, MD: US Department of Health and Human Services, Centers for Disease Control and Prevention, 2003-6 \url{http://wwwn.cdc.gov/nchs/nhanes/search/datapage.aspx?Component=Demographics&CycleBeginYear=2003}. Accessed July 31, 2014.
 
 Acknowledgment: This material is based upon work supported by the National Science Foundation Graduate Research Fellowship under Grant No. DGE-0940903.
 }
