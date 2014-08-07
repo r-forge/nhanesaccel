@@ -4,7 +4,7 @@
 Calculate adjusted MEC weights
 }
 \description{
-This function calculates adjusted MEC weights for the subsample of NHANES 2003-2004 and 2005-2006 participants with valid accelerometer data, making the subsample nationally representative. This function is used internally by \code{\link{nhanes.accel.process}} but could also be used independently.
+This function calculates adjusted MEC weights for the subsample of NHANES 2003-2004 and 2005-2006 participants with valid accelerometer data, making the subsample nationally representative. This function is used internally by \code{\link{nhanes.accel.process}}, but could also be used independently.
 }
 \usage{
 nhanes.accel.reweight(acceldata, wave, seqn.column, include.column)
