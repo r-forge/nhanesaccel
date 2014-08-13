@@ -24,7 +24,7 @@ Column number that indicates whether participant has valid data (1 if valid, 0 i
 }
 }
 \details{
-The adjusted MEC weights should be used in statistical analysis, along with the survey design features "strata" and "primary sampling unit (PSU)" from the NHANES Demographics files. This is necessary to account for the complex survey design of NHANES. 
+The adjusted MEC weights should be used in statistical analysis, along with the survey design features `strata' and `primary sampling unit (PSU)' from the NHANES Demographics files. This is necessary to account for the complex survey design of NHANES. 
 
 The function generates a variable called wtmec2yr_adj. This is the appropriate weight variable if only one wave of NHANES data is used for analysis. If both NHANES 2003-2004 and NHANES 2005-2006 are used for analysis, the user will have to call this function once for each wave, and calculate 4-year weights for analysis. 4-year weights can be calculated by the user simply as wtmec4yr_adj = wtmec2yr_adj/2.
 }
