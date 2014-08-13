@@ -13,7 +13,7 @@ This package contains functions for processing accelerometer data from the Natio
 Package: \tab nhanesaccel\cr
 Type: \tab Package\cr
 Version: \tab 2.1.1\cr
-Date: \tab 2014-08-12\cr
+Date: \tab 2014-08-13\cr
 License: \tab GPL-2\cr
 }
 The following functions are included in 'nhanesaccel':
