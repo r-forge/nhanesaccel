@@ -45,7 +45,7 @@ Minimum number of valid weekdays required to be considered valid for analysis.
 Minimum number of valid weekend days required to be considered valid for analysis.
 }
   \item{int.cuts}{
-Vector of four cut-points from which five intensity ranges are derived. For example, if thresh=c(100,760,2020,5999), minutes with 0-99 counts are classified as intensity level 1, minutes with 100-759 counts are classified as intensity level 2, ... , and minutes with 5999 or greater counts are classified as intensity level 5. Intensities 1-5 typically correspond to sedentary, light, lifestyle, moderate, and vigorous.
+Vector of four cut-points from which five intensity ranges are derived. For example, if thresh = c(100, 760, 2020, 5999), minutes with 0-99 counts are classified as intensity level 1, minutes with 100-759 counts are classified as intensity level 2, ... , and minutes with 5999 or greater counts are classified as intensity level 5. Intensities 1-5 typically correspond to sedentary, light, lifestyle, moderate, and vigorous.
 }
   \item{youth.mod.cuts}{
 Vector of 12 count cut-points for moderate physical activity in youth. The 1st value is for participants age 6, 2nd is for participants age 7, ... , and 12th is for participants age 17. If agreement with NCI's SAS programs [2] is desired, user should enter youth.mod.cuts = c(1400, 1515, 1638, 1770, 1910, 2059, 2220, 2393, 2580, 2781, 3000, 3239).
@@ -125,7 +125,7 @@ The activity bout algorithm operates similarly to the non-wear algorithm. If act
 If the user allows for a tolerance in bout detection (e.g. active.bout.tol = 2) and does not use the NCI algorithm (active.bout.nci = FALSE), specifying non-zero values for mvpa.bout.tol.lower and vig.bout.tol.lower is highly recommended. Otherwise the algorithm will tend to classify minutes immediately before and after an activity bout as being part of the bout.
 }
 \value{
-A single matrix or a list of two matrices, depending on return.form. If write.csv is set to TRUE, the function also writes one or two .csv files to user-specified directory.
+A single data frame or a list of two data frames, depending on return.form. If write.csv is set to TRUE, the function also writes one or two .csv files to user-specified directory.
 }
 \references{
 1. Centers for Disease Control and Prevention (CDC). National Center for Health Statistics (NCHS). National Health and Nutrition Examination Survey Data. Hyattsville, MD: US Department of Health and Human Services, Centers for Disease Control and Prevention, 2003-6 \url{http://www.cdc.gov/nchs/nhanes/nhanes_questionnaires.htm}. Accessed July 31, 2014.
@@ -149,14 +149,14 @@ Some additional information on the package nhanesaccel and its functions can be 
 }
 \examples{
 # Process NHANES 2003-2006 data using default settings
-acceldata1 <- nhanes.accel.process()
+nhanes1 <- nhanes.accel.process()
 
 # Process NHANES 2003-2006 data with following non-default settings: require 4 valid days 
 # of monitoring for participants to be considered to have valid data for analysis; use 
 # 90- rather than 60-minute window for non-wear algorithm; and request that physical 
 # activity averages are calculated for all days as well as weekdays and weekend days 
 # separately.
-acceldata2 <- nhanes.accel.process(valid.days = 4, nonwear.window = 90, 
+nhanes2 <- nhanes.accel.process(valid.days = 4, nonwear.window = 90, 
                                    weekday.weekend = TRUE)
 
 # Process NHANES 2003-2006 data while replicating methods used in the NCI's SAS programs 
@@ -165,21 +165,21 @@ acceldata2 <- nhanes.accel.process(valid.days = 4, nonwear.window = 90,
 
 youthmod <- c(1400, 1515, 1638, 1770, 1910, 2059, 2220, 2393, 2580, 2781, 3000, 3239)
 youthvig <- c(3758, 3947, 4147, 4360, 4588, 4832, 5094, 5375, 5679, 6007, 6363, 6751)
-acceldata3 <- nhanes.accel.process(waves = 3, brevity = 2, valid.days = 4, 
-                                   youth.mod.cuts = youthmod, youth.vig.cuts = youthvig, 
-                                   cpm.nci = TRUE, days.distinct = TRUE, nonwear.tol = 2, 
-                                   nonwear.tol.upper = 100, nonwear.nci = TRUE, 
-                                   weartime.maximum = 1440, active.bout.tol = 2, 
-                                   active.bout.nci = TRUE, artifact.thresh = 32767, 
-                                   artifact.action = 3)
+nhanes3 <- nhanes.accel.process(waves = 3, brevity = 2, valid.days = 4, 
+                                youth.mod.cuts = youthmod, youth.vig.cuts = youthvig, 
+                                cpm.nci = TRUE, days.distinct = TRUE, nonwear.tol = 2, 
+                                nonwear.tol.upper = 100, nonwear.nci = TRUE, 
+                                weartime.maximum = 1440, active.bout.tol = 2, 
+                                active.bout.nci = TRUE, artifact.thresh = 32767, 
+                                artifact.action = 3)
 
 # The easier way is to use the nci.methods input as shown below
-acceldata4 <- nhanes.accel.process(waves = 3, brevity = 2, nci.methods = TRUE)
+nhanes4 <- nhanes.accel.process(waves = 3, brevity = 2, nci.methods = TRUE)
 
 # They give equivalent results
-all(acceldata3 == acceldata4, na.rm = TRUE)
+all(nhanes3 == nhanes4, na.rm = TRUE)
 
-# The variables in acceldata3 and acceldata4 correspond to the variables created by 
+# The variables in nhanes3 and nhanes4 correspond to the variables created by 
 # the NCI's SAS programs as follows: valid_days/valdays, include/valid_person, 
 # mvpa_bouted/allmean_mv, mvpa_min/allmean_mv1, mod_min/allmean_m1, vig_bouted/allmean_v, 
 # vig_min/allmean_v1, and cpm/allmean_cnt_wr. All values are identical using either 

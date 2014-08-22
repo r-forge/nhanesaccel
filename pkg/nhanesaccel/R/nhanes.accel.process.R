@@ -760,9 +760,6 @@ function(waves = 3, directory = getwd(), nci.methods = FALSE, brevity = 1,
       
     }
     
-    # Close status bar
-    #close(pb)
-    
     # Delete empty rows in dayvars2
     dayvars2 <- dayvars2[1:k,]
     
@@ -973,11 +970,13 @@ function(waves = 3, directory = getwd(), nci.methods = FALSE, brevity = 1,
   
   # Return data frame(s)
   if (return.form == 1) {
+    personaves <- as.data.frame(personaves)
     return(personaves)
   } else if (return.form == 2) {
+    dayvars <- as.data.frame(dayvars)
     return(dayvars)
   } else if (return.form == 3) {
-    retlist <- list(personaves = personaves, dayvars = dayvars)
+    retlist <- list(personaves = as.data.frame(personaves), dayvars = as.data.frame(dayvars))
     return(retlist)
   }
   
