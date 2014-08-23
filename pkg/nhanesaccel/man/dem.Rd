@@ -5,16 +5,16 @@
 NHANES 2003-2006 demographics data
 }
 \description{
-Includes 45 demographic variables.
+Includes 45 demographics variables for participants in NHANES 2003-2006.
 }
 \usage{data(dem)}
 \format{
   A data frame with 20470 observations on the following 45 variables.
   \describe{
     \item{\code{seqn}}{Respondent sequence number (i.e. participant ID).}
-    \item{\code{sddsrvyr}}{Data release number. 3 if participant is from NHANES 2003-2004, 4 if participant is from NHANES 2005-2006.}
-    \item{\code{ridstatr}}{Interview/examination status. 1 if participant was interviewed only, 2 if participant was both interviewed and Mobile Examination Center examined.}
-    \item{\code{ridexmon}}{Six month time period when examination was performed. 1 for November 1 through April 30, 2 for May 1 through October 31.}
+    \item{\code{sddsrvyr}}{Data release number (3 if participant is from NHANES 2003-2004, 4 if participant is from NHANES 2005-2006).}
+    \item{\code{ridstatr}}{Interview/examination status (1 if participant was interviewed only, 2 if participant was both interviewed and Mobile Examination Center examined).}
+    \item{\code{ridexmon}}{Six month time period when examination was performed (1 for Nov. 1-April 30, 2 for May 1-Oct. 31).}
     \item{\code{riagendr}}{Gender (1 = Male, 2 = Female).}
     \item{\code{ridageyr}}{Age in years at time of household screening. Values are whole numbers from 0 to 85, with 85 indicating that the participant was 85 years of age or older.}
     \item{\code{ridagemn}}{Age in months at time of household screening for participants younger than 85 years.}
@@ -23,9 +23,9 @@ Includes 45 demographic variables.
     \item{\code{dmqmilit}}{Veteran/military status. Did you ever serve in the Armed Forces of the United States? (1 = Yes, 2 = No, 7 = Refused, 9 = Don't know)}
     \item{\code{dmdborn}}{Country of birth (1 = Born in 50 US States or Washington, DC, 2 = Born in Mexico, 3 = Born Elsewhere, 7 = Refused, 9 = Don't know).}
     \item{\code{dmdcitzn}}{Citizenship status (1 = Citizen by birth or naturalization, 2 = Not a citizen of the US, 7 = Refused, 9 = Don't know).}
-    \item{\code{dmdyrsus}}{Length of time in US (1 = Less than 1 year, 2 = 1 yr., less than 5 yrs., 3 = 5 yrs., less than 10 yrs., 4 = 10 yrs., less than 15 yrs., 5 = 15 yrs., less than 20 yrs., 6 = 20 yrs., less than 30 yrs., 7 = 30 yrs., less than 40 yrs., 8 = 40 yrs., less than 50 yrs., 9 = 50 years or more, 77 = Refused, 88 = Could not determine, 99 = Don't know).}
-    \item{\code{dmdeduc3}}{Education level for children/youth age 6-19 years. What is the highest grade or level of school you completed or the highest degree you have received? (0 = Never Attended/Kindergarten Only, 1 = 1st Grade, 2 = 2nd Grade, 3 = 3rd Grade, 4 = 4th Grade, 5 = 5th Grade, 6 = 6th Grade, 7 = 7th Grade, 8 = 8th Grade, 9 = 9th Grade, 10 = 10th Grade, 11 = 11th Grade, 12 = 12th Grade, No Diploma, 13 = High School Graduate, 14 = GED or Equivalent, 15 = More than high school, 55 = Less than 5th Grade, 66 = Less than 9th Grade, 77 = Refused, 99 = Don't know)}
-    \item{\code{dmdeduc2}}{Education level for adults age 20 years or older. What is the highest grade or level of school you have completed or the highest degree you have received? (1 = Less than 9th Grade, 2 = 9-11th Grade (Includes 12th grade with no diploma), 3 = High School Grad/GED or Equivalent, 4 = Some College or AA degree, 5 = College Graduate or above, 7 = Refused, 9 = Don't know)}
+    \item{\code{dmdyrsus}}{Length of time in US (1 = Less than 1 yr., 2 = 1 yr., less than 5 yrs., 3 = 5 yrs., less than 10 yrs., 4 = 10 yrs., less than 15 yrs., 5 = 15 yrs., less than 20 yrs., 6 = 20 yrs., less than 30 yrs., 7 = 30 yrs., less than 40 yrs., 8 = 40 yrs., less than 50 yrs., 9 = 50 yrs. or more, 77 = Refused, 88 = Could not determine, 99 = Don't know).}
+    \item{\code{dmdeduc3}}{Education level for children/youth age 6-19 years. What is the highest grade or level of school you completed or the highest degree you have received? (0 = Never attended/kindergarten only, 1 = 1st grade, 2 = 2nd grade, 3 = 3rd grade, 4 = 4th grade, 5 = 5th grade, 6 = 6th grade, 7 = 7th grade, 8 = 8th grade, 9 = 9th grade, 10 = 10th grade, 11 = 11th grade, 12 = 12th grade, no diploma, 13 = High school graduate, 14 = GED or equivalent, 15 = More than high school, 55 = Less than 5th grade, 66 = Less than 9th grade, 77 = Refused, 99 = Don't know)}
+    \item{\code{dmdeduc2}}{Education level for adults age 20 years or older. What is the highest grade or level of school you have completed or the highest degree you have received? (1 = Less than 9th Grade, 2 = 9-11th grade (Includes 12th grade with no diploma), 3 = High school grad/GED or equivalent, 4 = Some college or AA degree, 5 = College graduate or above, 7 = Refused, 9 = Don't know)}
     \item{\code{dmdschol}}{Now attending school? (1 = In school, 2 = On vacation from school (between grades), 3 = Neither in school or on vacation from school (between grades), 7 = Refused, 9 = Don't know)}
     \item{\code{dmdmartl}}{Marital status (1 = Married, 2 = Widowed, 3 = Divorced, 4 = Separated, 5 = Never married, 6 = Living with partner, 77 = Refused, 99 = Don't know).}
     \item{\code{dmdhhsiz}}{Total number of people in the household (7 indicates 7 or more people).}
@@ -36,9 +36,9 @@ Includes 45 demographic variables.
     \item{\code{dmdhrgnd}}{Gender of the household reference person (1 = Male, 2 = Female).}
     \item{\code{dmdhrage}}{Age in years of the household reference person at the time of screening. Values are whole numbers from 16 to 85, with 85 indicating that the household reference person was 85 years of age or older.}
     \item{\code{dmdhrbrn}}{Household reference person country of birth (1 = Born in 50 US States or Washington, DC, 2 = Born in Mexico, 3 = Born Elsewhere, 7 = Refused, 9 = Don't know).}
-    \item{\code{dmdhredu}}{Education level for household reference person. What is the highest grade or level of school you have received? (1 = Less than 9th Grade, 2 = 9-11th Grade (Includes 12th grade with no diploma), 3 = High School Grad/GED or equivalent, 4 = Some college or AA degree, 5 = College Graduate or above, 7 = Refused, 9 = Don't know)}
+    \item{\code{dmdhredu}}{Education level for household reference person. What is the highest grade or level of school you have received? (1 = Less than 9th grade, 2 = 9-11th grade (Includes 12th grade with no diploma), 3 = High school grad/GED or equivalent, 4 = Some college or AA degree, 5 = College graduate or above, 7 = Refused, 9 = Don't know)}
     \item{\code{dmdhrmar}}{Marital status of household reference person (1 = Married, 2 = Widowed, 3 = Divorced, 4 = Separated, 5 = Never married, 6 = Living with partner, 77 = Refused, 99 = Don't know).}
-    \item{\code{dmdhsedu}}{Education level for spouse of household reference person. What is the highest grade level you have completed or the highest degree you have received? (1 = Less than 9th Grade, 2 = 9-11th Grade (Includes 12th grade with no diploma), 3 = High School Grad/GED or equivalent, 4 = Some College or AA degree, 5 = College Graduate or above, 7 = Refused, 9 = Don't know)}
+    \item{\code{dmdhsedu}}{Education level for spouse of household reference person. What is the highest grade level you have completed or the highest degree you have received? (1 = Less than 9th grade, 2 = 9-11th grade (Includes 12th grade with no diploma), 3 = High school grad/GED or equivalent, 4 = Some college or AA degree, 5 = College graduate or above, 7 = Refused, 9 = Don't know)}
     \item{\code{sialang}}{Language used for interview (1 = English, 2 = Spanish).}
     \item{\code{siaproxy}}{Whether a proxy respondent was used in conducting the interview (1 = Yes, 2 = No).}
     \item{\code{siaintrp}}{Whether an interpreter was used in conducting the interview (1 = Yes, 2 = No).}
@@ -54,7 +54,7 @@ Includes 45 demographic variables.
     \item{\code{sdmvpsu}}{Masked variance unit pseudo-primary sampling unit variable for variance estimation.}
     \item{\code{sdmvstra}}{Masked variance unit pseudo-stratum variable for variance estimation.}
     \item{\code{ridreth2}}{Linked NHANES III race/ethnicity (1 = Non-Hispanic White, 2 = Non-Hispanic Black, 3 = Mexican American, 4 = Other Race - Including Multi-Racial, 5 = Other Hispanic).}
-    \item{\code{dmdeduc}}{Education level for participants age 6 years or older. What is the highest grade or level of school you have completed or the highest degree you have received? (1 = Less Than High School, 2 = High School Diploma (including GED), 3 = More Than High School, 7 = Refused, 9 = Don't Know)}
+    \item{\code{dmdeduc}}{Education level for participants age 6 years or older. What is the highest grade or level of school you have completed or the highest degree you have received? (1 = Less than high school, 2 = High school diploma (including GED), 3 = More than high school, 7 = Refused, 9 = Don't Know)}
     \item{\code{dmdfmsiz}}{Total number of people in the family (7 indicates 7 or more people).}
   }
 }

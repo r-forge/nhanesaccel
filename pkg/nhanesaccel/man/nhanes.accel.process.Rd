@@ -24,16 +24,16 @@ nhanes.accel.process(waves = 3, directory = getwd(), nci.methods = FALSE, brevit
 }
 \arguments{
   \item{waves}{
-1 for NHANES 2003-2004, 2 for NHANES 2005-2006, 3 for both.
+1 to process NHANES 2003-2004 data, 2 to process NHANES 2005-2006 data, 3 to process both.
 }
   \item{directory}{
-Location that the user would like the .csv file(s) to be written to. The default is the current working directory.
+Location that the user would like .csv file(s) to be written to (if write.csv is TRUE). The default is the current working directory, e.g. getwd().
 }
   \item{nci.methods}{
 If TRUE, inputs are set to replicate the data processing methods used by the NCI's SAS programs [2]. See Examples for further details. Even if nci.methods is set to TRUE, the user can specify non-default values for waves, brevity, weekday.weekend, return.form, and write.csv.
 }
   \item{brevity}{
-Controls the number of physical activity variables returned. If 1, returns basic indicators of physical activity volume; if 2, also returns indicators of activity intensities, activity bouts, sedentary behavior, and peak activity; if 3, also returns hourly count averages.
+Controls the number of physical activity variables returned. If 1, returns basic indicators of physical activity volume (11 variables total); if 2, also returns indicators of activity intensities, activity bouts, sedentary behavior, and peak activity (48 variables total); if 3, also returns hourly count averages (72 variables total).
 }
   \item{valid.days}{
 Minimum number of valid days required to be considered valid for analysis.
@@ -57,7 +57,7 @@ Vector of 12 count cut-points for vigorous physical activity in youth. The 1st v
 If TRUE, average counts per minute is calculated by dividing average daily counts by average daily weartime, as opposed to averaging each day's counts per minute value. In general, leave as FALSE unless you want to replicate the NCI's SAS programs [2].
 }
   \item{days.distinct}{
-If TRUE, treat each day of data as distinct, i.e. identify non-wear time and activity bouts in day 1, then day 2, etc.; If FALSE, apply algorithms on continuous basis for full monitoring period. Strongly recommend setting to FALSE to capture non-wear periods that start between 11 pm and midnight, when participants removes accelerometer to go to sleep.
+If TRUE, treat each day of data as distinct, i.e. identify non-wear time and activity bouts in day 1, then day 2, etc.; If FALSE, apply algorithms on continuous basis for full monitoring period. Strongly recommend setting to FALSE to capture non-wear periods that start between 11 pm and midnight, when participants remove accelerometer to go to sleep.
 }
   \item{nonwear.window}{
 Minimum length of a non-wear interval.
@@ -114,7 +114,7 @@ If TRUE, function computes physical activity averages for weekdays and weekend d
 If 1, function returns physical activity variables on per-person basis, i.e. daily averages for each participant; if 2, function returns variables on per-day basis; if 3, function returns both via a list.
 }
   \item{write.csv}{
-If TRUE, function writes .csv file(s) to user-specified directory (by default, the current working directory). The files written are those requested by return.form. If FALSE, no .csv files are written.
+If TRUE, function writes .csv file(s) to user-specified directory (if unspecified, the current working directory). The files written are those requested by return.form. If FALSE, no .csv files are written.
 }
 }
 \details{
@@ -125,7 +125,7 @@ The activity bout algorithm operates similarly to the non-wear algorithm. If act
 If the user allows for a tolerance in bout detection (e.g. active.bout.tol = 2) and does not use the NCI algorithm (active.bout.nci = FALSE), specifying non-zero values for mvpa.bout.tol.lower and vig.bout.tol.lower is highly recommended. Otherwise the algorithm will tend to classify minutes immediately before and after an activity bout as being part of the bout.
 }
 \value{
-A single data frame or a list of two data frames, depending on return.form. If write.csv is set to TRUE, the function also writes one or two .csv files to user-specified directory.
+A single data frame or a list of two data frames, depending on return.form. If write.csv is set to TRUE, the function also writes .csv files to user-specified directory.
 }
 \references{
 1. Centers for Disease Control and Prevention (CDC). National Center for Health Statistics (NCHS). National Health and Nutrition Examination Survey Data. Hyattsville, MD: US Department of Health and Human Services, Centers for Disease Control and Prevention, 2003-6 \url{http://www.cdc.gov/nchs/nhanes/nhanes_questionnaires.htm}. Accessed July 31, 2014.
@@ -140,7 +140,7 @@ Dane R. Van Domelen, W. Stephen Pittard, and Tamara B. Harris.
 \note{
 There is no perfect solution for dealing with abnormally high count values, also known as artifacts. The NCI's SAS programs replace artifacts (which they define as the ActiGraph AM-7164 maximum, 32767) with the mean of neighboring count values [2]. This can be done by specifying artifact.thresh = 32767 and artifact.action = 3. This method may work well, but in many cases count values that are artifacts are surrounded by count values that are only slightly lower, bringing into question whether the entire group of counts is plausible or implausible. Count values at or around the cut-point defined by artifact.thresh can contribute greatly to daily counts. Therefore the default settings, artifact.thresh = 25000 and artifact.action = 1, simply excludes days of monitoring with one or more count values of 25000 or greater. As this solution is clearly not ideal, users are welcome to choose their own preferred setting for artifact.thresh and artifact.action.
 
-NHANES uses a complex, multi-stage, probability sampling design, and all statistical analysis should account for its design features. The dataset produced by nhanes.accel.process includes the variables wtmec2yr_adj and wtmec4yr_adj. If only data from one wave of NHANES is used (i.e. 2003-2004 OR 2005-2006), the appropriate weight variable is wtmec2yr_adj. If data from both NHANES 2003-2004 and NHANES 2005-2006 is used, the appropriate weight variable is wtmec4yr_adj. Note that analyses must also include the variables strata and primary sampling unit (PSU), which are in the NHANES Demographics files along with other important variables like gender, age, race/ethnicity, etc.
+NHANES uses a complex, multi-stage, probability sampling design, and all statistical analysis should account for its design features. The dataset produced by nhanes.accel.process includes the variables wtmec2yr_adj and wtmec4yr_adj. If only data from one wave of NHANES is used (i.e. 2003-2004 or 2005-2006), the appropriate weight variable is wtmec2yr_adj. If data from both NHANES 2003-2004 and NHANES 2005-2006 is used, the appropriate weight variable is wtmec4yr_adj. Note that analyses must also include the variables strata and primary sampling unit (PSU), which are in the NHANES Demographics files along with other important variables like gender, age, race/ethnicity, etc.
 
 Some additional information on the package nhanesaccel and its functions can be found on Dane's website, \url{https://sites.google.com/site/danevandomelen/}.
 }
@@ -153,7 +153,7 @@ nhanes1 <- nhanes.accel.process()
 
 # Process NHANES 2003-2006 data with following non-default settings: require 4 valid days 
 # of monitoring for participants to be considered to have valid data for analysis; use 
-# 90- rather than 60-minute window for non-wear algorithm; and request that physical 
+# 90-minute rather than 60-minute window for non-wear algorithm; and request that physical
 # activity averages are calculated for all days as well as weekdays and weekend days 
 # separately.
 nhanes2 <- nhanes.accel.process(valid.days = 4, nonwear.window = 90, 
