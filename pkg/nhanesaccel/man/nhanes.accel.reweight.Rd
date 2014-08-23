@@ -51,7 +51,7 @@ Some additional information on the package nhanesaccel and its functions can be 
 # Process NHANES 2003-2004 data using default settings
 nhanes0304 <- nhanes.accel.process(waves = 1)
 
-# Create new 'include' variable which is 1 if participant has 4 or more valid days
+# Create new 'include' variable - 1 if participant has 4 or more valid days, otherwise 0
 nhanes0304$include2 <- ifelse(nhanes0304$valid_days >= 4, 1, 0)
 
 # Rename previous 2-year weight variable so new one does not overwrite it
@@ -65,8 +65,8 @@ nhanes0304 <- nhanes.accel.reweight(acceldata = nhanes0304, wave = 1, seqn.colum
 nhanes0304[1:20, ]
 
 # This is just an example to illustrate the usage of nhanes.accel.reweight. In practice,
-# it would be easier to just add `valid.days = 4' to the initial nhanes.accel.process
-# function call.
+# it would be easier to add `valid.days = 4' to the initial nhanes.accel.process function
+# call. Then the 4-day weights would be calculated automatically.
 }
 \keyword{ NHANES }
 \keyword{ survey weights }
