@@ -157,12 +157,11 @@ nhanes1 <- nhanes.accel.process()
 # activity averages are calculated for all days as well as weekdays and weekend days 
 # separately.
 nhanes2 <- nhanes.accel.process(valid.days = 4, nonwear.window = 90, 
-                                   weekday.weekend = TRUE)
+                                weekday.weekend = TRUE)
 
 # Process NHANES 2003-2006 data while replicating methods used in the NCI's SAS programs 
 # [2]. One way to do this is to explicitly set each function input in order to replicate
 # the NCI's methods.
-
 youthmod <- c(1400, 1515, 1638, 1770, 1910, 2059, 2220, 2393, 2580, 2781, 3000, 3239)
 youthvig <- c(3758, 3947, 4147, 4360, 4588, 4832, 5094, 5375, 5679, 6007, 6363, 6751)
 nhanes3 <- nhanes.accel.process(waves = 3, brevity = 2, valid.days = 4, 
@@ -173,7 +172,7 @@ nhanes3 <- nhanes.accel.process(waves = 3, brevity = 2, valid.days = 4,
                                 active.bout.nci = TRUE, artifact.thresh = 32767, 
                                 artifact.action = 3)
 
-# The easier way is to use the nci.methods input as shown below
+# The easier way is to use the nci.methods input as shown here
 nhanes4 <- nhanes.accel.process(waves = 3, brevity = 2, nci.methods = TRUE)
 
 # They give equivalent results

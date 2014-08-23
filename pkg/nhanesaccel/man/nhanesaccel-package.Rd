@@ -13,7 +13,7 @@ This package contains functions for processing accelerometer data from the Natio
 Package: \tab nhanesaccel\cr
 Type: \tab Package\cr
 Version: \tab 2.1.1\cr
-Date: \tab 2014-08-22\cr
+Date: \tab 2014-08-23\cr
 License: \tab GPL-2\cr
 }
 The following functions are included in 'nhanesaccel':
@@ -42,5 +42,41 @@ Acknowledgment: This material is based upon work supported by the National Scien
 \code{\link[accelerometry:accelerometry-package]{accelerometry}}
 }
 \examples{
-NA
+# Process NHANES 2003-2006 data using default settings
+nhanes1 <- nhanes.accel.process()
+
+# Process NHANES 2003-2006 data with following non-default settings: require 4 valid days 
+# of monitoring for participants to be considered to have valid data for analysis; use 
+# 90- rather than 60-minute window for non-wear algorithm; and request that physical 
+# activity averages are calculated for all days as well as weekdays and weekend days 
+# separately.
+nhanes2 <- nhanes.accel.process(valid.days = 4, nonwear.window = 90, 
+                                weekday.weekend = TRUE)
+
+# Process NHANES 2003-2006 data while replicating methods used in the NCI's SAS programs 
+# [2]. One way to do this is to explicitly set each function input in order to replicate
+# the NCI's methods.
+youthmod <- c(1400, 1515, 1638, 1770, 1910, 2059, 2220, 2393, 2580, 2781, 3000, 3239)
+youthvig <- c(3758, 3947, 4147, 4360, 4588, 4832, 5094, 5375, 5679, 6007, 6363, 6751)
+nhanes3 <- nhanes.accel.process(waves = 3, brevity = 2, valid.days = 4, 
+                                youth.mod.cuts = youthmod, youth.vig.cuts = youthvig, 
+                                cpm.nci = TRUE, days.distinct = TRUE, nonwear.tol = 2, 
+                                nonwear.tol.upper = 100, nonwear.nci = TRUE, 
+                                weartime.maximum = 1440, active.bout.tol = 2, 
+                                active.bout.nci = TRUE, artifact.thresh = 32767, 
+                                artifact.action = 3)
+
+# The easier way is to use the nci.methods input as shown here
+nhanes4 <- nhanes.accel.process(waves = 3, brevity = 2, nci.methods = TRUE)
+
+# They give equivalent results
+all(nhanes3 == nhanes4, na.rm = TRUE)
+
+# The variables in nhanes3 and nhanes4 correspond to the variables created by 
+# the NCI's SAS programs as follows: valid_days/valdays, include/valid_person, 
+# mvpa_bouted/allmean_mv, mvpa_min/allmean_mv1, mod_min/allmean_m1, vig_bouted/allmean_v, 
+# vig_min/allmean_v1, and cpm/allmean_cnt_wr. All values are identical using either 
+# program. The only difference is that the SAS programs include data on nine more 
+# participants who had potentially unreliable data. Excluding these participants is 
+# considered acceptable by the NCI [2].
 }
