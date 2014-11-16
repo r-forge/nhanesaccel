@@ -2,7 +2,7 @@
 \alias{dem}
 \docType{data}
 \title{
-NHANES 2003-2006 demographics data
+NHANES 2003-2006 Demographics Data
 }
 \description{
 Includes 45 demographics variables for participants in NHANES 2003-2006.
