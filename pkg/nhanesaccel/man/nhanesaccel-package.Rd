@@ -3,7 +3,7 @@
 \alias{nhanesaccel}
 \docType{package}
 \title{
-Process accelerometer data from NHANES 2003-2006
+Process Accelerometer Data from NHANES 2003-2006
 }
 \description{
 This package contains functions for processing accelerometer data from the National Health and Nutrition Examination Survey (NHANES), years 2003-2006 (data included). The main function, nhanes.accel.process, generates a variety of physical activity variables, including indicators of physical activity volume, intensity, frequency, and duration. It also generates variables that can be used to study patterns of physical activity, i.e. weekday/weekend differences and hourly trends. Numerous function inputs are available to control data processing algorithms like non-wear time classification and activity bout detection.
@@ -13,7 +13,7 @@ This package contains functions for processing accelerometer data from the Natio
 Package: \tab nhanesaccel\cr
 Type: \tab Package\cr
 Version: \tab 2.1.1\cr
-Date: \tab 2014-11-04\cr
+Date: \tab 2014-11-16\cr
 License: \tab GPL-2\cr
 }
 The following functions are included in 'nhanesaccel':

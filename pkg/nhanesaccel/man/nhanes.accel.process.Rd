@@ -1,7 +1,7 @@
 \name{nhanes.accel.process}
 \alias{nhanes.accel.process}
 \title{
-Process NHANES 2003-2006 accelerometer data
+Process NHANES 2003-2006 Accelerometer Data
 }
 \description{
 This function calculates a variety of physical activity variables from the time-series accelerometer data in NHANES 2003-2006. A data dictionary for the variables generated is available on Dane's website, \url{https://sites.google.com/site/danevandomelen/r-package-nhanesaccel/data-dictionary}.

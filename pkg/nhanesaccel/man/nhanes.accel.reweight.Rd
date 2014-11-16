@@ -1,7 +1,7 @@
 \name{nhanes.accel.reweight}
 \alias{nhanes.accel.reweight}
 \title{
-Calculate adjusted Mobile Exam Center (MEC) weights
+Calculate Adjusted Mobile Exam Center (MEC) Weights
 }
 \description{
 This function calculates adjusted Mobile Exam Center (MEC) weights for the subsample of NHANES 2003-2004 and 2005-2006 participants with valid accelerometer data, making the subsample nationally representative. This function is used internally by \code{\link{nhanes.accel.process}}, but could also be used independently.
