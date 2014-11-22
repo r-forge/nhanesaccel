@@ -1,8 +1,5 @@
 # Run nhanesaccel code from paper in The R Journal
 
-# Load nhanesaccel package
-library("nhanesaccel")
-
 # Process NHANES 2003-2006 data using default settings
 nhanes1 <- nhanes.accel.process()
 
