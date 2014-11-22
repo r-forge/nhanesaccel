@@ -33,11 +33,6 @@ nhanes2$cpm_diff <- (nhanes2$wk_cpm - nhanes2$we_cpm) /
 
 readline("Press <Enter> to continue")
 
-# Load survey package
-library("survey")
-
-readline("Press <Enter> to continue")
-
 # Create survey object called hanes
 hanes <- svydesign(id = ~sdmvpsu, strata = ~sdmvstra, weight = ~wtmec4yr_adj,
                    data = nhanes2, nest = TRUE)
