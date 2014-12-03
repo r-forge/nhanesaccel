@@ -6,14 +6,14 @@
 Process Accelerometer Data from NHANES 2003-2006
 }
 \description{
-This package contains functions for processing accelerometer data from the National Health and Nutrition Examination Survey (NHANES), years 2003-2006 (data included). The main function, nhanes.accel.process, generates a variety of physical activity variables, including indicators of physical activity volume, intensity, frequency, and duration. It also generates variables that can be used to study patterns of physical activity, i.e. weekday/weekend differences and hourly trends. Numerous function inputs are available to control data processing algorithms like non-wear time classification and activity bout detection.
+Functions for processing accelerometer data from the National Health and Nutrition Examination Survey (NHANES), years 2003-2006 (data included). The main function, nhanes.accel.process, generates a variety of physical activity variables, including indicators of physical activity volume, intensity, frequency, and duration. It also generates variables that can be used to study patterns of physical activity, i.e. weekday/weekend differences and hourly trends. Numerous function inputs are available to control data processing algorithms like non-wear time classification and activity bout detection.
 }
 \details{
 \tabular{ll}{
 Package: \tab nhanesaccel\cr
 Type: \tab Package\cr
 Version: \tab 2.1.1\cr
-Date: \tab 2014-11-22\cr
+Date: \tab 2014-12-03\cr
 License: \tab GPL-2\cr
 }
 The following functions are included in 'nhanesaccel':
@@ -33,7 +33,7 @@ Maintainer: Dane R. Van Domelen <vandomed@gmail.com>
 
 2. National Cancer Institute. Risk factor monitoring and methods: SAS programs for analyzing NHANES 2003-2004 accelerometer data. Available at: \url{http://riskfactor.cancer.gov/tools/nhanes_pam}. Accessed July 31, 2014.
 
-3. Dane R. Van Domelen (2014). accelerometry: Functions for processing minute-to-minute accelerometer data. R package version 2.2.2. \url{http://CRAN.R-project.org/package=accelerometry}.
+3. Dane R. Van Domelen (2014). accelerometry: Functions for processing minute-to-minute accelerometer data. R package version 2.2.4. \url{http://CRAN.R-project.org/package=accelerometry}.
 
 Acknowledgment: This material is based upon work supported by the National Science Foundation Graduate Research Fellowship under Grant No. DGE-0940903.
 }
