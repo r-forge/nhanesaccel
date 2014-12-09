@@ -13,7 +13,7 @@ Functions for processing accelerometer data from the National Health and Nutriti
 Package: \tab nhanesaccel\cr
 Type: \tab Package\cr
 Version: \tab 2.1.1\cr
-Date: \tab 2014-12-03\cr
+Date: \tab 2014-12-09\cr
 License: \tab GPL-2\cr
 }
 The following functions are included in 'nhanesaccel':
